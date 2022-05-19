@@ -7,7 +7,18 @@ public class Global {
 
     public static Integer RegisterCounter=0;
 
-    public static HashMap<String,HashMap<String,Integer>> offsets = new HashMap<String,HashMap<String,Integer>>();
+    public static LinkedHashMap<String,LinkedHashMap<String,Integer>> fieldoffsets = new LinkedHashMap<String,LinkedHashMap<String,Integer>>();
+    public static LinkedHashMap<String,LinkedHashMap<String,Integer>> methodoffsets = new LinkedHashMap<String,LinkedHashMap<String,Integer>>();
+
+
+    public static String getMethodType(String methodname,String classname){
+        String type;
+        String current_class = classname;
+        while((type = Global.ST.lookup(methodname).get(current_class))==null){
+            current_class = getParentClass(current_class);
+        }
+        return type.replace("METHOD: ", "");
+    }
 
     public static HashMap<String,int[]> lastoffsetmap=new HashMap<String,int[]>();
 

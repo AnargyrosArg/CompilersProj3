@@ -7,18 +7,17 @@ class Overload2 {
 
 
   class A{
-      public int foo(){
-          return 0;
+      public boolean foo(int a, boolean b ,A c){
+          return true;
           }
+    public int foobar(boolean b){
+        return 4;
+    }
   }
 
   class B extends A{
       A type;    
-  }
-
-  class C extends B{
-      public int foo(){
-          return 2;
+      public int asdf(boolean b){
+          return 1;
       }
-
   }

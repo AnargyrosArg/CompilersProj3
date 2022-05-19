@@ -23,6 +23,9 @@ public class CompilerMain {
         TypeCheckVisitor typechecker = new TypeCheckVisitor();
         root.accept(typechecker,null);
      //   System.err.println("Typechecker successful");
+        Global.ST.resetToRoot();
+        VtableVisitor vtableVisitor = new VtableVisitor();
+        root.accept(vtableVisitor,null);
     }
     catch(ParseException ex){
         System.out.println(ex.getMessage());

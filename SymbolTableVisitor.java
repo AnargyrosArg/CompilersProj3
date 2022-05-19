@@ -62,7 +62,9 @@ public class SymbolTableVisitor extends GJDepthFirst<String[],String[]>{
         String classname = n.f1.accept(this, null)[0];
         int fieldoffset =0;
         int methodoffset =0;
-        HashMap<String,Integer> current_offsets = new HashMap<String,Integer>();
+        LinkedHashMap<String,Integer> current_field_offsets = new LinkedHashMap<String,Integer>();
+        LinkedHashMap<String,Integer> current_method_offsets = new LinkedHashMap<String,Integer>();
+
       //  System.out.println("Class: "+ classname);
         LinkedHashMap<String,String> class_entry_value = new LinkedHashMap<String,String>();
         class_entry_value.put( "CLASS" , "CLASS");
@@ -74,8 +76,8 @@ public class SymbolTableVisitor extends GJDepthFirst<String[],String[]>{
             LinkedHashMap<String,String> value = new LinkedHashMap<String,String>();
             value.put(classname,Type);
             Global.ST.insert(Name, value);
-            System.out.println(classname+"."+Name +" : "+ fieldoffset);
-            current_offsets.put(classname+"."+Name, fieldoffset);
+            //System.out.println(classname+"."+Name +" : "+ fieldoffset);
+            current_field_offsets.put(classname+"."+Name, fieldoffset);
             if(Type.equals("int")){
                 fieldoffset += 4;
             }else if(Type.equals("boolean")){
@@ -91,13 +93,15 @@ public class SymbolTableVisitor extends GJDepthFirst<String[],String[]>{
             LinkedHashMap<String,String> value = new LinkedHashMap<String,String>();
             value.put(classname,Type);
             Global.ST.insert(methodname, value);
-            System.out.println(classname+"."+methodname +" : "+ methodoffset);
-            current_offsets.put(classname+"."+methodname, methodoffset);
+            //System.out.println(classname+"."+methodname +" : "+ methodoffset);
+            current_method_offsets.put(classname+"."+methodname, methodoffset);
             methodoffset += 8;
             
         }
         Global.lastoffsetmap.put(classname, new int[]{fieldoffset,methodoffset});
-        Global.offsets.put(classname, current_offsets);
+        Global.fieldoffsets.put(classname, current_field_offsets);
+        Global.methodoffsets.put(classname, current_method_offsets);
+
         return null;
     }
 
@@ -145,8 +149,15 @@ public class SymbolTableVisitor extends GJDepthFirst<String[],String[]>{
         int fieldoffset = Global.lastoffsetmap.get(extendname)[0];
         int methodoffset = Global.lastoffsetmap.get(extendname)[1];
         //get parent offsets
-        HashMap<String,Integer> current_offsets = Global.offsets.get(extendname);
-        
+        LinkedHashMap<String,Integer> current_field_offsets = new LinkedHashMap<String,Integer>();
+        for(String key:Global.fieldoffsets.get(extendname).keySet()){
+            current_field_offsets.put(key, Global.fieldoffsets.get(extendname).get(key));
+        }
+        LinkedHashMap<String,Integer> current_method_offsets = new LinkedHashMap<String,Integer>();
+        for(String key:Global.methodoffsets.get(extendname).keySet()){
+            current_method_offsets.put(key, Global.methodoffsets.get(extendname).get(key));
+        }
+
       //  System.out.println("Class: "+ classname);
         LinkedHashMap<String,String> class_entry_value = new LinkedHashMap<String,String>();
         class_entry_value.put( "CLASS" , "SUBCLASS: " + extendname);
@@ -158,8 +169,8 @@ public class SymbolTableVisitor extends GJDepthFirst<String[],String[]>{
             value = new LinkedHashMap<String,String>();
             value.put(classname,Type);
             Global.ST.insert(Name, value);
-            System.out.println(classname+"."+Name +" : "+ fieldoffset);
-            current_offsets.put(classname+"."+Name, fieldoffset);
+            //System.out.println(classname+"."+Name +" : "+ fieldoffset);
+            current_field_offsets.put(classname+"."+Name, fieldoffset);
             if(Type.equals("int")){
                 fieldoffset += 4;
             }else if(Type.equals("boolean")){
@@ -196,18 +207,19 @@ public class SymbolTableVisitor extends GJDepthFirst<String[],String[]>{
                         }
                     }
                 }
-                if(print==true){
-                    System.out.println(classname+"."+methodname +" : "+ methodoffset);
-                    current_offsets.put(classname+"."+methodname, methodoffset);
-                    methodoffset += 8;
-                }
             }
+            if(print==true){
+                // System.out.println(classname+"."+methodname +" : "+ methodoffset);
+                 current_method_offsets.put(classname+"."+methodname, methodoffset);
+                 methodoffset += 8;
+             }
             value = new LinkedHashMap<String,String>();
             value.put(classname,Type);
             Global.ST.insert(methodname, value);
         }
         Global.lastoffsetmap.put(classname, new int[]{fieldoffset,methodoffset});
-        Global.offsets.put(classname, current_offsets);
+        Global.fieldoffsets.put(classname, current_field_offsets);
+        Global.methodoffsets.put(classname, current_method_offsets);
         return null;
      }
 

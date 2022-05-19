@@ -9,7 +9,7 @@ compile:
 test:
 	javac Main.java
 	javac CompilerMain.java
-	java Main Example.txt
+	java CompilerMain Example.txt
 
 clean:
 	rm -f *.class *~

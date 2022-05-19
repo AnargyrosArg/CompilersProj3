@@ -1,0 +1,8 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/anarg/school/compilers/proj3'
+java -jar ./javacc_jtb/jtb132di.jar minijava.jj
+java -jar ./javacc_jtb/javacc5.jar minijava-jtb.jj
+javac CompilerMain.java
+javac Main.java
+make: Leaving directory '/home/anarg/school/compilers/proj3'
+ 

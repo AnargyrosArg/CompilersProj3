@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Thu May 19 09:35:50 2022
+# Make data base, printed on Fri May 20 13:29:24 2022
 
 # Variables
 
@@ -49,11 +49,11 @@ VSCODE_CWD = /mnt/c/Users/Anargyros/AppData/Local/Programs/Microsoft VS Code
 # default
 MAKE_HOST := x86_64-pc-linux-gnu
 # environment
-PATH = /home/anarg/.vscode-server/bin/da15b6fd3ef856477bf6f4fb29ba1b7af717770d/bin/remote-cli:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Program Files/WindowsApps/CanonicalGroupLimited.Ubuntu20.04onWindows_2004.2021.825.0_x64__79rhkp1fndgsc:/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/mnt/c/Program Files (x86)/Common Files/Oracle/Java/javapath:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/OpenVPN/bin:/mnt/c/Program Files/PuTTY/:/mnt/c/Program Files/MATLAB/R2018b/runtime/win64:/mnt/c/Program Files/MATLAB/R2018b/bin:/mnt/c/Users/Anargyros/AppData/Local/Programs/Python/Python310:/mnt/c/msys64/mingw64/bin:/mnt/c/Program Files/nodejs/:/mnt/c/Program Files/MySQL/MySQL Shell 8.0/bin/:/mnt/c/Users/Anargyros/AppData/Local/Programs/Python/Python36/Scripts/:/mnt/c/Users/Anargyros/AppData/Local/Programs/Python/Python36/:/mnt/c/Users/Anargyros/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/Anargyros/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Program Files/JetBrains/CLion 2021.2.3/bin:/mnt/d/IntelliJ IDEA 2022.1/bin:/mnt/c/Users/Anargyros/AppData/Roaming/npm:/snap/bin
+PATH = /home/anarg/.vscode-server/bin/c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5/bin/remote-cli:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Program Files/WindowsApps/CanonicalGroupLimited.Ubuntu20.04onWindows_2004.2021.825.0_x64__79rhkp1fndgsc:/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/mnt/c/Program Files (x86)/Common Files/Oracle/Java/javapath:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/OpenVPN/bin:/mnt/c/Program Files/PuTTY/:/mnt/c/Program Files/MATLAB/R2018b/runtime/win64:/mnt/c/Program Files/MATLAB/R2018b/bin:/mnt/c/Users/Anargyros/AppData/Local/Programs/Python/Python310:/mnt/c/msys64/mingw64/bin:/mnt/c/Program Files/nodejs/:/mnt/c/Program Files/MySQL/MySQL Shell 8.0/bin/:/mnt/c/Users/Anargyros/AppData/Local/Programs/Python/Python36/Scripts/:/mnt/c/Users/Anargyros/AppData/Local/Programs/Python/Python36/:/mnt/c/Users/Anargyros/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/Anargyros/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Program Files/JetBrains/CLion 2021.2.3/bin:/mnt/d/IntelliJ IDEA 2022.1/bin:/mnt/c/Users/Anargyros/AppData/Roaming/npm:/snap/bin
 # environment
 VSCODE_LOG_STACK = false
 # environment
-VSCODE_IPC_HOOK_CLI = /tmp/vscode-ipc-bd8914bc-d777-4f13-bcf5-7c397a268818.sock
+VSCODE_IPC_HOOK_CLI = /tmp/vscode-ipc-ec1d7512-07d6-498e-977e-95bd590fd687.sock
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # environment
@@ -77,7 +77,7 @@ LESSCLOSE = /usr/bin/lesspipe %s %s
 # environment
 LOGNAME = anarg
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
 # environment
 VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # automatic
@@ -101,7 +101,7 @@ NAME = Code
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
 # environment
-VSCODE_WSL_EXT_LOCATION = /mnt/c/Users/Anargyros/.vscode/extensions/ms-vscode-remote.remote-wsl-0.66.2
+VSCODE_WSL_EXT_LOCATION = /mnt/c/Users/Anargyros/.vscode/extensions/ms-vscode-remote.remote-wsl-0.66.3
 # default
 MAKE_COMMAND := make
 # default
@@ -155,9 +155,9 @@ MOTD_SHOWN = update-motd
 
 # Directories
 
-# . (device 2064, inode 11698): 23 files, no impossibilities.
+# . (device 2064, inode 11698): 28 files, no impossibilities.
 
-# 23 files, no impossibilities in 1 directories.
+# 28 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -187,12 +187,12 @@ test:
 #  recipe to execute (from 'makefile', line 10):
 	javac Main.java
 	javac CompilerMain.java
-	java Main Example.txt
+	java CompilerMain Example.txt
 
 # Not a target:
 makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-04-28 13:51:18
+#  Last modified 2022-05-19 14:42:35.653855314
 #  File has been updated.
 #  Successfully updated.
 
@@ -247,12 +247,12 @@ clean:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 31 / storage = 412 B / avg = 13 B
-# current buf: size = 8162 B / used = 412 B / count = 31 / avg = 13 B
+# strcache buffers: 1 (0) / strings = 36 / storage = 484 B / avg = 13 B
+# current buf: size = 8162 B / used = 484 B / count = 36 / avg = 13 B
 
-# strcache performance: lookups = 42 / hit rate = 26%
+# strcache performance: lookups = 47 / hit rate = 23%
 # hash-table stats:
-# Load=31/8192=0%, Rehash=0, Collisions=1/42=2%
-# Finished Make data base on Thu May 19 09:35:50 2022
+# Load=36/8192=0%, Rehash=0, Collisions=1/47=2%
+# Finished Make data base on Fri May 20 13:29:24 2022
 
  

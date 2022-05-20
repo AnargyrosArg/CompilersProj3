@@ -5,7 +5,13 @@ import java.util.*;
 public class Global {
     public static SymbolTable ST=new SymbolTable();
 
-    public static Integer RegisterCounter=0;
+    private static Integer RegisterCounter=1;
+
+    public static String getTempRegister(){
+        String register = "%"+RegisterCounter;
+        RegisterCounter++;
+        return register;
+    }
 
     public static LinkedHashMap<String,LinkedHashMap<String,Integer>> fieldoffsets = new LinkedHashMap<String,LinkedHashMap<String,Integer>>();
     public static LinkedHashMap<String,LinkedHashMap<String,Integer>> methodoffsets = new LinkedHashMap<String,LinkedHashMap<String,Integer>>();
@@ -115,6 +121,7 @@ public class Global {
         //so that the typechecker visitor can traverse it with nextChild.
         //bad implementation i know 
         this.table=this.original;
+        this.table.reset();
     }
     public void nextChild(){
         this.table=this.table.nextChild();
@@ -136,6 +143,13 @@ class ScopeTable{
         this.current =  new LinkedHashMap<String,LinkedHashMap<String,String>>();
         this.children = new ArrayList<ScopeTable>();
         this.prev=previous;
+    }
+
+    public void reset(){
+        this.current_child =0;
+        for(int i=0;i<children.size();i++){
+            children.get(i).reset();
+        }
     }
     public void insert(String name, LinkedHashMap<String,String> value) {
         if(current.get(name)!=null){

@@ -1,23 +1,13 @@
 class Overload2 {
 
     public static void main(String[] args){
+        int a;
+        int b;
+        a=32;
+        b = a - 21;
+        a =  a * b;
+        System.out.println(a);
+        System.out.println(b);
 	 }
 
 }
-
-
-  class A{
-      public boolean foo(int a, boolean b ,A c){
-          return true;
-          }
-    public int foobar(boolean b){
-        return 4;
-    }
-  }
-
-  class B extends A{
-      A type;    
-      public int asdf(boolean b){
-          return 1;
-      }
-  }

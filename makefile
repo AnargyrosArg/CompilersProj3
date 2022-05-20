@@ -9,7 +9,8 @@ compile:
 test:
 	javac Main.java
 	javac CompilerMain.java
-	java CompilerMain Example.txt
+	java CompilerMain Example.txt > Example.ll
+	clang -o out Example.ll
 
 clean:
 	rm -f *.class *~

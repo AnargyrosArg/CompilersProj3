@@ -22,24 +22,15 @@ store i32 32, i32* %1
 %2= load i32, i32* %1
 store i32 %2 , i32* %a
 %3 = alloca i32
-store i32 21, i32* %3
+store i32 2, i32* %3
 %4= load i32, i32* %a
 %5= load i32, i32* %3
-%6 = sub i32 %4, %5
+%6 = mul i32 %4, %5
 %7 = alloca i32
 store i32 %6, i32* %7
 %8= load i32, i32* %7
 store i32 %8 , i32* %b
-%9= load i32, i32* %a
-%10= load i32, i32* %b
-%11 = mul i32 %9, %10
-%12 = alloca i32
-store i32 %11, i32* %12
-%13= load i32, i32* %12
-store i32 %13 , i32* %a
-%14 = load i32 , i32* %a
-call void @print_int(i32 %14)
-%15 = load i32 , i32* %b
-call void @print_int(i32 %15)
+%9 = load i32 , i32* %b
+call void @print_int(i32 %9)
 ret i32 0 
 }

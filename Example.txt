@@ -4,9 +4,7 @@ class Overload2 {
         int a;
         int b;
         a=32;
-        b = a - 21;
-        a =  a * b;
-        System.out.println(a);
+        b = a * 2;
         System.out.println(b);
 	 }
 

@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri May 20 13:29:24 2022
+# Make data base, printed on Sun May 22 11:15:37 2022
 
 # Variables
 
@@ -53,7 +53,7 @@ PATH = /home/anarg/.vscode-server/bin/c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5/b
 # environment
 VSCODE_LOG_STACK = false
 # environment
-VSCODE_IPC_HOOK_CLI = /tmp/vscode-ipc-ec1d7512-07d6-498e-977e-95bd590fd687.sock
+VSCODE_IPC_HOOK_CLI = /tmp/vscode-ipc-e68f60a1-aa4d-4fe1-a96a-f6c66271cbb0.sock
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # environment
@@ -155,9 +155,9 @@ MOTD_SHOWN = update-motd
 
 # Directories
 
-# . (device 2064, inode 11698): 28 files, no impossibilities.
+# . (device 2064, inode 11698): 49 files, no impossibilities.
 
-# 28 files, no impossibilities in 1 directories.
+# 49 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -187,12 +187,13 @@ test:
 #  recipe to execute (from 'makefile', line 10):
 	javac Main.java
 	javac CompilerMain.java
-	java CompilerMain Example.txt
+	java CompilerMain Example.txt > Example.ll
+	clang -o out Example.ll
 
 # Not a target:
 makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-05-19 14:42:35.653855314
+#  Last modified 2022-05-20 16:42:22.391831751
 #  File has been updated.
 #  Successfully updated.
 
@@ -236,7 +237,7 @@ clean:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'makefile', line 15):
+#  recipe to execute (from 'makefile', line 16):
 	rm -f *.class *~
 
 # files hash-table stats:
@@ -247,12 +248,12 @@ clean:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 36 / storage = 484 B / avg = 13 B
-# current buf: size = 8162 B / used = 484 B / count = 36 / avg = 13 B
+# strcache buffers: 1 (0) / strings = 57 / storage = 917 B / avg = 16 B
+# current buf: size = 8162 B / used = 917 B / count = 57 / avg = 16 B
 
-# strcache performance: lookups = 47 / hit rate = 23%
+# strcache performance: lookups = 68 / hit rate = 16%
 # hash-table stats:
-# Load=36/8192=0%, Rehash=0, Collisions=1/47=2%
-# Finished Make data base on Fri May 20 13:29:24 2022
+# Load=57/8192=1%, Rehash=0, Collisions=1/68=1%
+# Finished Make data base on Sun May 22 11:15:37 2022
 
  

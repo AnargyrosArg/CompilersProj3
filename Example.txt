@@ -1,11 +1,13 @@
 class Overload2 {
-
     public static void main(String[] args){
-        int a;
-        int b;
-        a=32;
-        b = a * 2;
-        System.out.println(b);
-	 }
+        int i;
+        System.out.println(i);
+	}
+}
 
+class A{
+    public int bar(){
+        System.out.println(3);
+        return 3;
+    }
 }

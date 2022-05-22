@@ -14,23 +14,22 @@ define void @throw_oob() {
    call i32 (i8*, ...) @printf(i8* %_str)
    call void @exit(i32 1)   ret void
    }
+%class.A = type { i8*}
+@.A_vtable = global [1x i8*] [i8* bitcast (i32 ()* @A.bar to i8*)]
+
 define i32 @main(){
-%a = alloca i32
-%b = alloca i32
-%1 = alloca i32
-store i32 32, i32* %1
-%2= load i32, i32* %1
-store i32 %2 , i32* %a
-%3 = alloca i32
-store i32 2, i32* %3
-%4= load i32, i32* %a
-%5= load i32, i32* %3
-%6 = mul i32 %4, %5
-%7 = alloca i32
-store i32 %6, i32* %7
-%8= load i32, i32* %7
-store i32 %8 , i32* %b
-%9 = load i32 , i32* %b
-call void @print_int(i32 %9)
+%i = alloca i32
+%1 = load i32 , i32* %i
+call void @print_int(i32 %1)
 ret i32 0 
+}
+define i32 @A.bar(){
+%1 = alloca i32
+store i32 3, i32* %1
+%2 = load i32 , i32* %1
+call void @print_int(i32 %2)
+%3 = alloca i32
+store i32 3, i32* %3
+%4= load i32, i32* %3
+ret i32 %4
 }

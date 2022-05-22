@@ -7,6 +7,10 @@ public class Global {
 
     private static Integer RegisterCounter=1;
 
+    public static void resetRegisterCounter(){
+        RegisterCounter=1;
+    }
+
     public static String getTempRegister(){
         String register = "%"+RegisterCounter;
         RegisterCounter++;
@@ -15,7 +19,7 @@ public class Global {
 
     public static LinkedHashMap<String,LinkedHashMap<String,Integer>> fieldoffsets = new LinkedHashMap<String,LinkedHashMap<String,Integer>>();
     public static LinkedHashMap<String,LinkedHashMap<String,Integer>> methodoffsets = new LinkedHashMap<String,LinkedHashMap<String,Integer>>();
-
+    public static HashMap<String,String> evaluated_expression =  new HashMap<String,String>();
 
     public static String getMethodType(String methodname,String classname){
         String type;
@@ -24,6 +28,15 @@ public class Global {
             current_class = getParentClass(current_class);
         }
         return type.replace("METHOD: ", "");
+    }
+
+    public static String getFieldType(String fieldname , String classname){
+        String type;
+        String current_class =  classname;
+        while((type = Global.ST.lookup(fieldname).get(current_class))==null){
+            current_class = getParentClass(current_class);
+        }
+        return type;
     }
 
     public static HashMap<String,int[]> lastoffsetmap=new HashMap<String,int[]>();

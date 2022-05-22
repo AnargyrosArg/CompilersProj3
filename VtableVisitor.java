@@ -40,10 +40,31 @@ public class VtableVisitor extends GJDepthFirst<String,String>{
     */
     public String visit(ClassDeclaration n,  String argu) {
         String classname = n.f1.f0.tokenImage;
+        Set<String> fields = Global.fieldoffsets.get(classname).keySet();
+        StringBuilder typeBuilder = new StringBuilder("%class."+classname+" = type { i8* ,");
+
+        for(String field:fields){
+            String fieldtype = Global.getFieldType(field.replace(classname+".", ""),classname);
+
+            if(fieldtype.equals("int")){
+                typeBuilder.append("i32 ,");
+            }else if(fieldtype.equals("boolean")){
+                typeBuilder.append("i1 ,");
+            }else if(fieldtype.equals("boolean[]")){
+                typeBuilder.append("i1* ,");
+            }else if(fieldtype.equals("int[]")){
+                typeBuilder.append("i32* ,");
+            }else{
+                typeBuilder.append("i8* ,");
+            }
+            
+        }
+        typeBuilder.replace(typeBuilder.length()-2, typeBuilder.length(), "}");
+        System.out.println(typeBuilder);
         Set<String> methods = Global.methodoffsets.get(classname).keySet();
         System.out.print("@."+classname+"_vtable = global ["+ methods.size()+"x i8*] [");
         String vtable_decl = "";
-        
+    
         for(String method:methods){
             String methodtype =  Global.getMethodType(method.replace(classname+".", ""), classname);
             vtable_decl = vtable_decl.concat("i8* bitcast (");
@@ -64,7 +85,9 @@ public class VtableVisitor extends GJDepthFirst<String,String>{
                     type=type.concat("i8*, ");
                 }
             }
-            type = type.substring(0,type.length()-2);
+            if(methodtype.split(" ").length!=1){
+                type = type.substring(0,type.length()-2);
+            }
             type = type.concat(")*");
             vtable_decl = vtable_decl.concat(type+" @"+method+ " to i8*),\n");
         }
@@ -90,6 +113,27 @@ public class VtableVisitor extends GJDepthFirst<String,String>{
     */
     public String visit(ClassExtendsDeclaration n, String argu) {
         String classname = n.f1.f0.tokenImage;
+        Set<String> fields = Global.fieldoffsets.get(classname).keySet();
+        StringBuilder typeBuilder = new StringBuilder("%class."+classname+" = type { i8* ,");
+
+        for(String field:fields){
+            field  = field.subSequence(field.indexOf(".", 0)+1, field.length()).toString();
+            String fieldtype = Global.getFieldType(field.replace(classname+".", ""),classname);
+            if(fieldtype.equals("int")){
+                typeBuilder.append("i32 ,");
+            }else if(fieldtype.equals("boolean")){
+                typeBuilder.append("i1 ,");
+            }else if(fieldtype.equals("boolean[]")){
+                typeBuilder.append("i1* ,");
+            }else if(fieldtype.equals("int[]")){
+                typeBuilder.append("i32* ,");
+            }else{
+                typeBuilder.append("i8* ,");
+            }
+            
+        }
+        typeBuilder.replace(typeBuilder.length()-2, typeBuilder.length(), "}");
+        System.out.println(typeBuilder);
         Set<String> methods = Global.methodoffsets.get(classname).keySet();
         System.out.print("@."+classname+"_vtable = global ["+ methods.size()+"x i8*] [");
         String vtable_decl = "";
@@ -115,7 +159,9 @@ public class VtableVisitor extends GJDepthFirst<String,String>{
                     type=type.concat("i8*, ");
                 }
             }
-            type = type.substring(0,type.length()-2);
+            if(methodtype.split(" ").length!=1){
+                type = type.substring(0,type.length()-2);
+            }    
             type = type.concat(")*");
             //if method is also defined within current class override it at the vtable
             if(Global.ST.lookup(methodname).get(classname)!=null){

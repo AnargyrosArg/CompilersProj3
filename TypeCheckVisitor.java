@@ -203,6 +203,12 @@ public class TypeCheckVisitor extends GJDepthFirst<String,String>{
         return type;
     }
 
+    public String visit(Expression n,String argu){
+        String type = n.f0.accept(this,argu);
+        Global.evaluated_expression.put(n.toString(), type);
+        return type;
+    }
+
     
     public String visit(TrueLiteral n , String argu){
         return "boolean";

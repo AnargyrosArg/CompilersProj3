@@ -70,24 +70,24 @@ public class VtableVisitor extends GJDepthFirst<String,String>{
             vtable_decl = vtable_decl.concat("i8* bitcast (");
             String type = "";
             if(methodtype.split(" ")[0].equals("int")){
-                type=type.concat("i32 (");
+                type=type.concat("i32 (i8*");
             }else if(methodtype.split(" ")[0].equals("boolean")){
-                type=type.concat("i1 (");
+                type=type.concat("i1 (i8*");
             }else{
-                type = type.concat("i8* (");
+                type = type.concat("i8* (i8*");
             }
             for(int i=1;i<methodtype.split(" ").length;i++){
                 if(methodtype.split(" ")[i].equals("int")){
-                    type=type.concat("i32, ");
+                    type=type.concat(",i32 ");
                 }else if(methodtype.split(" ")[i].equals("boolean")){
-                    type=type.concat("i1, ");
+                    type=type.concat(",i1 ");
                 }else{
-                    type=type.concat("i8*, ");
+                    type=type.concat(",i8* ");
                 }
             }
-            if(methodtype.split(" ").length!=1){
-                type = type.substring(0,type.length()-2);
-            }
+            // if(methodtype.split(" ").length!=1){
+            //     type = type.substring(0,type.length()-2);
+            // }
             type = type.concat(")*");
             vtable_decl = vtable_decl.concat(type+" @"+method+ " to i8*),\n");
         }
@@ -144,24 +144,24 @@ public class VtableVisitor extends GJDepthFirst<String,String>{
             vtable_decl = vtable_decl.concat("i8* bitcast (");
             String type = "";
             if(methodtype.split(" ")[0].equals("int")){
-                type=type.concat("i32 (");
+                type=type.concat("i32 (i8*");
             }else if(methodtype.split(" ")[0].equals("boolean")){
-                type=type.concat("i1 (");
+                type=type.concat("i1 (i8*");
             }else{
-                type = type.concat("i8* (");
+                type = type.concat("i8* (i8*");
             }
             for(int i=1;i<methodtype.split(" ").length;i++){
                 if(methodtype.split(" ")[i].equals("int")){
-                    type=type.concat("i32, ");
+                    type=type.concat(",i32 ");
                 }else if(methodtype.split(" ")[i].equals("boolean")){
-                    type=type.concat("i1, ");
+                    type=type.concat(",i1 ");
                 }else{
-                    type=type.concat("i8*, ");
+                    type=type.concat(",i8* ");
                 }
             }
-            if(methodtype.split(" ").length!=1){
-                type = type.substring(0,type.length()-2);
-            }    
+            // if(methodtype.split(" ").length!=1){
+            //     type = type.substring(0,type.length()-2);
+            // }    
             type = type.concat(")*");
             //if method is also defined within current class override it at the vtable
             if(Global.ST.lookup(methodname).get(classname)!=null){

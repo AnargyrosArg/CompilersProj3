@@ -17,6 +17,22 @@ public class Global {
         return register;
     }
 
+    public static String javaType2LLVM(String type){
+        if(type.equals("int")){
+            return "i32";
+        }else if(type.equals("boolean")){
+            return "i1";
+        }
+        else if(type.equals("boolean[]")){
+            return "i1*";
+        }
+        else if(type.equals("int[]")){
+            return "i32*";
+        }
+        else{
+            return "i8*";
+        }
+    }
     public static LinkedHashMap<String,LinkedHashMap<String,Integer>> fieldoffsets = new LinkedHashMap<String,LinkedHashMap<String,Integer>>();
     public static LinkedHashMap<String,LinkedHashMap<String,Integer>> methodoffsets = new LinkedHashMap<String,LinkedHashMap<String,Integer>>();
     public static HashMap<String,String> evaluated_expression =  new HashMap<String,String>();
@@ -39,6 +55,13 @@ public class Global {
         return type;
     }
 
+    public static int getMethodOffset(String methodname , String classname){
+        String current_class = classname;
+        while(methodoffsets.get(classname).get(current_class+"."+methodname)==null){
+            current_class = getParentClass(current_class);
+        }
+        return methodoffsets.get(classname).get(current_class+"."+methodname);
+    }
     public static HashMap<String,int[]> lastoffsetmap=new HashMap<String,int[]>();
 
     public static boolean isSubtype(String type1, String type2){

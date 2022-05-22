@@ -36,11 +36,19 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
     public String visit(MethodDeclaration n,String argu){
         Global.resetRegisterCounter();
         String methodname = n.f2.f0.tokenImage;
+        String methodtype = Global.getMethodType(methodname, argu);
         String classname = argu;
         Global.ST.nextChild(); //ENTER SCOPE
-        //TODO fix return type + params!!!
-        System.out.println("define i32 @"+classname+"."+methodname+"(){");
         String type = n.f1.accept(this,argu);
+        System.out.print("define "+Global.javaType2LLVM(type)+  " @"+classname+"."+methodname+"(i8* %this");
+        //print args
+        //-------
+        if(n.f4.present()){
+            System.out.print(",");
+        }
+        n.f4.accept(this,argu);
+        //-------
+        System.out.print("){");
         //var decl
         n.f7.accept(this,argu);
         //statements
@@ -81,8 +89,8 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
             System.out.println(tempRegister + "= load i1, i1* " +exprRegister);
             System.out.println("store i1 "+tempRegister+" , i1* "+identifierRegister);
         }else{
-            System.out.println(tempRegister + "= load %class."+type+"*, %class."+type+"** " +exprRegister);
-            System.out.println("store %class."+type+"* "+tempRegister+" , %class."+type+"** "+identifierRegister);
+            System.out.println(tempRegister + "= load %class."+type+", %class."+type+"* " +exprRegister);
+            System.out.println("store %class."+type+" "+tempRegister+" , %class."+type+"* "+identifierRegister);
         }
         return identifierRegister;
     }
@@ -169,10 +177,7 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
         }else{
             //type is identifier remove % char we get from accepting the identifier
             type = type.substring(1);
-            //TODO ACTUALLY ALLOC type NOT type*!!!! refactor accordingly
-            //allocate room for a pointer
-            //register stores address of pointer that will point to object
-            System.out.println(tempRegister1 + " = alloca %class."+type+"*");
+            System.out.println(tempRegister1 + " = alloca %class."+type);
         }
         return tempRegister1;
 
@@ -197,7 +202,47 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
     public String visit(Identifier n, String argu){
         return "%"+n.f0.tokenImage;
     }
+
+    public String visit(FormalParameterList n, String argu){
+        System.out.print(Global.javaType2LLVM(n.f0.f0.accept(this,argu))+" %"+n.f0.f1.f0.tokenImage);
+        n.f1.accept(this,argu);
+        return null;
+    }
     
+    public String visit(FormalParameterTerm n , String argu){
+        System.out.print(", "+Global.javaType2LLVM(n.f1.f0.accept(this,argu))+" %"+n.f1.f1.f0.tokenImage);
+        return null;
+    }
+    //TODO expr lists?
+
+    public String visit(ExpressionList n, String argu){
+       String type = Global.javaType2LLVM(Global.evaluated_expression.get(n.f0.toString()));
+       String register = n.f0.accept(this,argu);
+       String list = n.f1.accept(this,argu);
+       return type +" "+register+list;
+    }
+    
+    public String visit(ExpressionTerm n , String argu){
+        String type = Global.javaType2LLVM(Global.evaluated_expression.get(n.f1.toString()));
+        String register = n.f1.accept(this,argu);
+
+        return " "+type+" "+register;
+    }
+
+    public String visit(ExpressionTail n , String argu){
+        String list="";
+        if(n.f0.present()){
+            for(Node node:n.f0.nodes){
+                list =  list.concat(node.accept(this,argu));
+            }
+        }
+        
+        return list;
+    }
+
+    public String visit(BracketExpression n , String argu){
+        return n.f1.accept(this,argu);
+    }
 
      public String visit(IntegerLiteral n ,String argu){
         String tempRegister = Global.getTempRegister();
@@ -224,7 +269,6 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
         String tempRegister1 = Global.getTempRegister();
         String tempRegister2 = Global.getTempRegister();
         String tempRegister3 = Global.getTempRegister();
-        String returnRegister = Global.getTempRegister();
 
         //new expression expects a class name as an identifier that specifies the type
         String type = n.f1.f0.tokenImage;
@@ -233,23 +277,27 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
         System.out.println(tempRegister1+" = alloca %class."+type);
         
         //load first element in tempregister 2, its always pointer to vtable
-        System.out.println(tempRegister2+" = getelementptr %class."+type +", %class."+type+"* "+tempRegister1+", i32 0, i32 0");
-        System.out.println(tempRegister3+" = bitcast i8** "+ tempRegister2+" to ["+Global.methodoffsets.size() +" x i8*]**");
+        System.out.println(tempRegister2+" = getelementptr inbounds %class."+type +", %class."+type+"* "+tempRegister1+", i32 0, i32 0");
+        System.out.println(tempRegister3+" = bitcast i8** "+ tempRegister2+" to ["+Global.methodoffsets.get(type).size() +" x i8*]**");
 
         //store address of vtable in object 
-        System.out.println("store ["+Global.methodoffsets.size() +" x i8*]* @."+type+"_vtable, ["+Global.methodoffsets.size() +" x i8*]** "+tempRegister3);
+        System.out.println("store ["+Global.methodoffsets.get(type).size() +" x i8*]* @."+type+"_vtable, ["+Global.methodoffsets.get(type).size() +" x i8*]** "+tempRegister3);
 
         //TODO REST OF THE FIELDS
 
 
-        System.out.println(returnRegister+" = alloca %class."+type+"*");
-        System.out.println("store %class."+type+"* "+tempRegister1+", %class."+type+"** "+returnRegister);
-        return returnRegister;
+
+        return tempRegister1;
     }
 
 
 
      public String visit(MessageSend n, String argu){
+        String args ="";
+        if(n.f4.present()){
+            args = n.f4.accept(this,argu);
+        }
+        String[] argtable = args.split(" ");
         String expr_register = n.f0.accept(this,argu);
         String tempRegister1 = Global.getTempRegister();
         String tempRegister2 = Global.getTempRegister();
@@ -257,31 +305,54 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
         String tempRegister4 = Global.getTempRegister();
         String tempRegister5 = Global.getTempRegister();
         String tempRegister6 = Global.getTempRegister();
-        String returnRegister = Global.getTempRegister();
+    
 
 
         String type = Global.evaluated_expression.get(n.f0.toString());
         String methodtype = Global.getMethodType(n.f2.f0.tokenImage, type);
-        int methodoffset = Global.methodoffsets.get(type).get(type+"."+n.f2.f0.tokenImage);
-        
-        //expr register is pointer to pointer to object
-        //dereference once
-        System.out.println(tempRegister1 + " = load %class."+type+"* , %class."+type+"** "+expr_register);
+        String rettype = methodtype.split(" ")[0];
+        int methodoffset = Global.getMethodOffset(n.f2.f0.tokenImage, type);
+                
         //get pointer to vtable
-        System.out.println(tempRegister2+" = getelementptr %class."+type +", %class."+type+"* "+tempRegister1+", i32 0, i32 0");
-        //get pointer to methodoffset/8-th element of the vtable
-        System.out.println(tempRegister3+" = getelementptr i8* , i8** "+tempRegister2+", i32 "+(methodoffset/8));
-        //load func address
-        System.out.println(tempRegister4 +" = load i8* ,i8** "+tempRegister3);
-        //hardcoded for now TODO: read methodtype and add args                  vv
-        System.out.println(tempRegister5 +" = bitcast i8* "+tempRegister4+" to i32 ()*");
-        //TODO read methodtype and add rettype      vv
-        System.out.println(tempRegister6 +" = call i32 "+tempRegister5+"()");
+        System.out.println(tempRegister1+" = getelementptr inbounds %class."+type +", %class."+type+"* "+expr_register+", i32 0, i32 0");
+        //load vtable 
+        System.out.println(tempRegister2+" = load i8* , i8** "+tempRegister1);
+        //cast to vtable type
+        System.out.println(tempRegister3+" = bitcast i8* "+tempRegister2+" to ["+ Global.methodoffsets.get(type).size() +" x i8*]*");
+        //get pointer to function
+        System.out.println(tempRegister4+" = getelementptr ["+ Global.methodoffsets.get(type).size() +" x i8*], ["+ Global.methodoffsets.get(type).size() +" x i8*]* "+tempRegister3+", i32 0 , i32 "+methodoffset/8);
+        //load address of funct
+        System.out.println(tempRegister5+" = load i8* , i8** "+tempRegister4);
+        //bitcast from i8* to actual funct type
+        System.out.print(tempRegister6+" = bitcast i8* "+tempRegister5+" to "+Global.javaType2LLVM(rettype)+"(" );
+        System.out.print(argtable[0]);
+        for(int i=2;i<argtable.length;i=i+2){
+            System.out.print(","+argtable[i]);
+        }
+        System.out.print(")*\n");
+        //call funct TODO args 
+        for(int i=1;i<argtable.length;i=i+2){
+            String tempRegister_loop = Global.getTempRegister();
+            System.out.println(tempRegister_loop+" = load "+argtable[i-1]+ ","+argtable[i-1]+"* "+argtable[i]);
+            argtable[i] = tempRegister_loop;
+        }
 
-        
+        String tempRegister7 = Global.getTempRegister();
+        String returnRegister = Global.getTempRegister();
+        System.out.print(tempRegister7+" = call "+Global.javaType2LLVM(rettype)+" "+tempRegister6+"(");
 
-        System.out.println(returnRegister+" = alloca i32");
-        System.out.println("store i32 "+tempRegister6 +", i32* "+returnRegister);
+        System.out.print(argtable[0]+" "+argtable[1]);
+        for(int i=2;i<argtable.length;i=i+2){
+            System.out.print(","+argtable[i]);
+            System.out.print(" "+argtable[i+1]);
+        }
+
+
+        System.out.print(")\n");
+        //return register
+        System.out.println(returnRegister+" = alloca "+Global.javaType2LLVM(rettype)+"");
+        System.out.println("store "+Global.javaType2LLVM(rettype)+" "+tempRegister7 +", "+Global.javaType2LLVM(rettype)+"* "+returnRegister);
+
 
         return returnRegister;
     }

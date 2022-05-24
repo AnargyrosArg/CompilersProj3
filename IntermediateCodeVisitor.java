@@ -43,12 +43,19 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
         System.out.print("define "+Global.javaType2LLVM(type)+  " @"+classname+"."+methodname+"(i8* %this");
         //print args
         //-------
-        if(n.f4.present()){
-            System.out.print(",");
+        String args[] = n.f4.accept(this,argu).split(" ");
+
+        for(int i=0;i<args.length;i=i+2){
+            System.out.print(","+args[i]+" ");
+            System.out.print(args[i+1]+".arg");
         }
-        n.f4.accept(this,argu);
         //-------
-        System.out.print("){");
+        System.out.print("){\n");
+        //load from temp arg vars into identifiers
+        for(int i=0;i<args.length;i=i+2){
+            System.out.println(args[i+1]+" = alloca "+args[i]);
+            System.out.println("store "+args[i]+" "+args[i+1]+".arg ,"+args[i]+"* "+args[i+1]);
+        }
         //var decl
         n.f7.accept(this,argu);
         //statements
@@ -204,14 +211,26 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
     }
 
     public String visit(FormalParameterList n, String argu){
-        System.out.print(Global.javaType2LLVM(n.f0.f0.accept(this,argu))+" %"+n.f0.f1.f0.tokenImage);
-        n.f1.accept(this,argu);
-        return null;
+        String type = Global.javaType2LLVM(n.f0.f0.accept(this,argu));
+        String register = n.f0.f1.accept(this,argu);
+        String list = n.f1.accept(this,argu);
+        return type +" "+register + list;
     }
     
     public String visit(FormalParameterTerm n , String argu){
-        System.out.print(", "+Global.javaType2LLVM(n.f1.f0.accept(this,argu))+" %"+n.f1.f1.f0.tokenImage);
-        return null;
+        String type = Global.javaType2LLVM(n.f1.f0.accept(this,argu));
+        String register = n.f1.f1.accept(this,argu);
+        return " "+type+" "+register;
+    }
+
+    public String visit(FormalParameterTail n ,String argu){
+        String list ="";
+        if(n.f0.present()){
+            for(Node node:n.f0.nodes){
+                list =  list.concat(node.accept(this,argu));
+            }
+        }
+        return list;
     }
     //TODO expr lists?
 
@@ -225,7 +244,6 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
     public String visit(ExpressionTerm n , String argu){
         String type = Global.javaType2LLVM(Global.evaluated_expression.get(n.f1.toString()));
         String register = n.f1.accept(this,argu);
-
         return " "+type+" "+register;
     }
 
@@ -325,8 +343,8 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
         System.out.println(tempRegister5+" = load i8* , i8** "+tempRegister4);
         //bitcast from i8* to actual funct type
         System.out.print(tempRegister6+" = bitcast i8* "+tempRegister5+" to "+Global.javaType2LLVM(rettype)+"(" );
-        System.out.print(argtable[0]);
-        for(int i=2;i<argtable.length;i=i+2){
+        System.out.print("i8* ");
+        for(int i=0;i<argtable.length;i=i+2){
             System.out.print(","+argtable[i]);
         }
         System.out.print(")*\n");
@@ -336,13 +354,15 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
             System.out.println(tempRegister_loop+" = load "+argtable[i-1]+ ","+argtable[i-1]+"* "+argtable[i]);
             argtable[i] = tempRegister_loop;
         }
+        String tempRegister8 = Global.getTempRegister();
 
         String tempRegister7 = Global.getTempRegister();
         String returnRegister = Global.getTempRegister();
+        System.out.println(tempRegister8+" = bitcast %class."+type+"* "+ expr_register +" to i8*");
         System.out.print(tempRegister7+" = call "+Global.javaType2LLVM(rettype)+" "+tempRegister6+"(");
 
-        System.out.print(argtable[0]+" "+argtable[1]);
-        for(int i=2;i<argtable.length;i=i+2){
+        System.out.print("i8* "+tempRegister8);
+        for(int i=0;i<argtable.length;i=i+2){
             System.out.print(","+argtable[i]);
             System.out.print(" "+argtable[i+1]);
         }

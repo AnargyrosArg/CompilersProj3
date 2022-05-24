@@ -1,16 +1,15 @@
 class Overload2 {
     public static void main(String[] args){
-        System.out.println((new A()).foo(32,true));
-        //System.out.println((new A()).bar());
-
+        A a;
+        int i;
+        a = new A();
+        i = a.foo(32);
 	}
 }
 
 class A{
-    public int foo(int i,boolean b){
+    public int foo(int i){
+        System.out.println(i);
         return i;
-    }
-    public int bar(){
-        return 1;
     }
 }

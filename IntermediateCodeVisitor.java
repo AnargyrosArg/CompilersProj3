@@ -1,7 +1,7 @@
 import syntaxtree.*;
 
 import visitor.GJDepthFirst;
-
+//TODO calloc heap allocation on new , class objects as arguements , fields
 
 
 public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{

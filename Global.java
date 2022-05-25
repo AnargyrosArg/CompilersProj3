@@ -30,7 +30,7 @@ public class Global {
             return "i32*";
         }
         else{
-            return "i8*";
+            return "%class."+type;
         }
     }
     public static LinkedHashMap<String,LinkedHashMap<String,Integer>> fieldoffsets = new LinkedHashMap<String,LinkedHashMap<String,Integer>>();

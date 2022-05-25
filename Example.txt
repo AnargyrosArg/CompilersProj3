@@ -1,15 +1,23 @@
 class Overload2 {
     public static void main(String[] args){
         A a;
-        int i;
+        B b;
+        int  i;
+        i=32;
         a = new A();
-        i = a.foo(32);
+        b = new B();
+        i = a.foo(i,b);
 	}
 }
 
 class A{
-    public int foo(int i){
+    boolean b;
+    public int foo(int i,A a){
         System.out.println(i);
         return i;
     }
+}
+
+class B extends A{
+int c;
 }

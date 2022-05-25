@@ -219,6 +219,7 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
     
     public String visit(FormalParameterTerm n , String argu){
         String type = Global.javaType2LLVM(n.f1.f0.accept(this,argu));
+        type = type.replace(".%", ".");
         String register = n.f1.f1.accept(this,argu);
         return " "+type+" "+register;
     }
@@ -353,6 +354,7 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
             String tempRegister_loop = Global.getTempRegister();
             System.out.println(tempRegister_loop+" = load "+argtable[i-1]+ ","+argtable[i-1]+"* "+argtable[i]);
             argtable[i] = tempRegister_loop;
+
         }
         String tempRegister8 = Global.getTempRegister();
 

@@ -81,8 +81,14 @@ public class VtableVisitor extends GJDepthFirst<String,String>{
                     type=type.concat(",i32 ");
                 }else if(methodtype.split(" ")[i].equals("boolean")){
                     type=type.concat(",i1 ");
-                }else{
-                    type=type.concat(",i8* ");
+                }else if(methodtype.split(" ")[i].equals("int[]")){
+                    type = type.concat(",i32* ");
+                }
+                else if(methodtype.split(" ")[i].equals("boolean[]")){
+                    type = type.concat(",i1* ");
+                }
+                else{
+                    type=type.concat(",%class."+methodtype.split(" ")[i]+" ");
                 }
             }
             // if(methodtype.split(" ").length!=1){
@@ -155,8 +161,9 @@ public class VtableVisitor extends GJDepthFirst<String,String>{
                     type=type.concat(",i32 ");
                 }else if(methodtype.split(" ")[i].equals("boolean")){
                     type=type.concat(",i1 ");
-                }else{
-                    type=type.concat(",i8* ");
+                }
+                else{
+                    type=type.concat(",%class."+methodtype.split(" ")[i]+" ");
                 }
             }
             // if(methodtype.split(" ").length!=1){

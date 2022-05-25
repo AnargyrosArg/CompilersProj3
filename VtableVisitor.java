@@ -25,6 +25,8 @@ public class VtableVisitor extends GJDepthFirst<String,String>{
         "   call void @exit(i32 1)"+
         "   ret void\n"+
         "   }\n");
+        System.out.println("%.BooleanArrayType = type { i32 , i1*}");
+        System.out.println("%.IntArrayType = type { i32 , i32*}");
         return null;
     }
 
@@ -51,9 +53,9 @@ public class VtableVisitor extends GJDepthFirst<String,String>{
             }else if(fieldtype.equals("boolean")){
                 typeBuilder.append("i1 ,");
             }else if(fieldtype.equals("boolean[]")){
-                typeBuilder.append("i1* ,");
+                typeBuilder.append("%.BooleanArrayType ,");
             }else if(fieldtype.equals("int[]")){
-                typeBuilder.append("i32* ,");
+                typeBuilder.append("%.IntArrayType ,");
             }else{
                 typeBuilder.append("i8* ,");
             }
@@ -82,10 +84,10 @@ public class VtableVisitor extends GJDepthFirst<String,String>{
                 }else if(methodtype.split(" ")[i].equals("boolean")){
                     type=type.concat(",i1 ");
                 }else if(methodtype.split(" ")[i].equals("int[]")){
-                    type = type.concat(",i32* ");
+                    type = type.concat(",%.IntArrayType ");
                 }
                 else if(methodtype.split(" ")[i].equals("boolean[]")){
-                    type = type.concat(",i1* ");
+                    type = type.concat(",%.BooleanArrayType ");
                 }
                 else{
                     type=type.concat(",%class."+methodtype.split(" ")[i]+" ");
@@ -130,9 +132,9 @@ public class VtableVisitor extends GJDepthFirst<String,String>{
             }else if(fieldtype.equals("boolean")){
                 typeBuilder.append("i1 ,");
             }else if(fieldtype.equals("boolean[]")){
-                typeBuilder.append("i1* ,");
+                typeBuilder.append("%.BooleanArrayType ,");
             }else if(fieldtype.equals("int[]")){
-                typeBuilder.append("i32* ,");
+                typeBuilder.append("%.IntArrayType ,");
             }else{
                 typeBuilder.append("i8* ,");
             }
@@ -161,6 +163,12 @@ public class VtableVisitor extends GJDepthFirst<String,String>{
                     type=type.concat(",i32 ");
                 }else if(methodtype.split(" ")[i].equals("boolean")){
                     type=type.concat(",i1 ");
+                }
+                else if(methodtype.split(" ")[i].equals("boolean[]")){
+                    type=type.concat(",%.BooleanArrayType ");
+                }
+                else if(methodtype.split(" ")[i].equals("int[]")){
+                    type=type.concat(",%.IntArrayType ");
                 }
                 else{
                     type=type.concat(",%class."+methodtype.split(" ")[i]+" ");

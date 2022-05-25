@@ -3,16 +3,20 @@ class Overload2 {
         A a;
         B b;
         int  i;
+        int[] table;
         i=32;
+
         a = new A();
         b = new B();
-        i = a.foo(i,b);
+        i = a.foo(i,b,table);
 	}
 }
 
 class A{
     boolean b;
-    public int foo(int i,A a){
+    int das;
+    boolean bass;
+    public int foo(int i,A a,int[] table){
         System.out.println(i);
         return i;
     }

@@ -24,10 +24,10 @@ public class Global {
             return "i1";
         }
         else if(type.equals("boolean[]")){
-            return "i1*";
+            return "%.BooleanArrayType";
         }
         else if(type.equals("int[]")){
-            return "i32*";
+            return "%.IntArrayType";
         }
         else{
             return "%class."+type;

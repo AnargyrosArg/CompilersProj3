@@ -67,14 +67,14 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
             System.out.println(tempRegister + "= load i32, i32* " +expr_register);
             System.out.println("ret i32 "+tempRegister);
         }else if(type.equals("int[]")){
-            System.out.println(tempRegister + "= load i32*, i32** " +expr_register);
-            System.out.println("ret i32* "+tempRegister);
+            System.out.println(tempRegister + "= load %.IntArrayType, %.IntArrayType* " +expr_register);
+            System.out.println("ret %.IntArrayType* "+tempRegister);
         }else if(type.equals("boolean")){
             System.out.println(tempRegister + "= load i1, i1* " +expr_register);
             System.out.println("ret i1 "+tempRegister);
         }else if(type.equals("boolean[]")){
-            System.out.println(tempRegister + "= load i1*, i1** " +expr_register);
-            System.out.println("ret i1* "+tempRegister);
+            System.out.println(tempRegister + "= load %.BooleanArrayType, %.BooleanArrayType* " +expr_register);
+            System.out.println("ret %.BooleanArrayType* "+tempRegister);
         }
         System.out.println("}");
         Global.ST.exit(); //EXIT SCOPE
@@ -176,11 +176,11 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
         if(type.equals("int")){
             System.out.println(tempRegister1 + " = alloca i32");
         }else if(type.equals("int[]")){
-            System.out.println(tempRegister1 + " = alloca i32*");
+            System.out.println(tempRegister1 + " = alloca %.IntArrayType");
         }else if(type.equals("boolean")){
             System.out.println(tempRegister1 + " = alloca i1");
         }else if(type.equals("boolean[]")){
-            System.out.println(tempRegister1 + " = alloca i1*");
+            System.out.println(tempRegister1 + " = alloca %.BooleanArrayType");
         }else{
             //type is identifier remove % char we get from accepting the identifier
             type = type.substring(1);
@@ -286,6 +286,7 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
 
     public String visit(AllocationExpression n ,String argu){
         String tempRegister1 = Global.getTempRegister();
+        String returnRegister = Global.getTempRegister();
         String tempRegister2 = Global.getTempRegister();
         String tempRegister3 = Global.getTempRegister();
 
@@ -293,20 +294,23 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
         String type = n.f1.f0.tokenImage;
     
         //allocate space for object in temp register , pointed to by tempregister 1
-        System.out.println(tempRegister1+" = alloca %class."+type);
-        
+        int typeSize = Global.lastoffsetmap.get(type)[0]+8;
+        System.out.println(tempRegister1+" = call i8* @calloc(i32 1,i32 "+typeSize+")");
+        System.out.println(returnRegister+" = bitcast i8* "+tempRegister1+" to %class."+type+"*");
+
+
         //load first element in tempregister 2, its always pointer to vtable
-        System.out.println(tempRegister2+" = getelementptr inbounds %class."+type +", %class."+type+"* "+tempRegister1+", i32 0, i32 0");
+        System.out.println(tempRegister2+" = getelementptr inbounds %class."+type +", %class."+type+"* "+returnRegister+", i32 0, i32 0");
         System.out.println(tempRegister3+" = bitcast i8** "+ tempRegister2+" to ["+Global.methodoffsets.get(type).size() +" x i8*]**");
 
         //store address of vtable in object 
         System.out.println("store ["+Global.methodoffsets.get(type).size() +" x i8*]* @."+type+"_vtable, ["+Global.methodoffsets.get(type).size() +" x i8*]** "+tempRegister3);
 
         //TODO REST OF THE FIELDS
+        
+        
 
-
-
-        return tempRegister1;
+        return returnRegister;
     }
 
 

@@ -28,7 +28,9 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
         //must not accept the field var declaration , these should be part of class object not register variables
 
         //accept statements
-        n.f6.accept(this,n.f1.f0.tokenImage);
+        if(n.f6.present()){
+            n.f6.accept(this,n.f1.f0.tokenImage);
+        }
 
         return null;
     }
@@ -43,7 +45,8 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
         System.out.print("define "+Global.javaType2LLVM(type)+  " @"+classname+"."+methodname+"(i8* %this");
         //print args
         //-------
-        String args[] = n.f4.accept(this,argu).split(" ");
+        if(n.f4.present()){
+            String args[] = n.f4.accept(this,argu).split(" ");
 
         for(int i=0;i<args.length;i=i+2){
             System.out.print(","+args[i]+" ");
@@ -56,10 +59,17 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
             System.out.println(args[i+1]+" = alloca "+args[i]);
             System.out.println("store "+args[i]+" "+args[i+1]+".arg ,"+args[i]+"* "+args[i+1]);
         }
+        }else{
+            System.out.print("){\n");
+        }
         //var decl
-        n.f7.accept(this,argu);
+        if(n.f7.present()){
+            n.f7.accept(this,argu);
+        }
         //statements
-        n.f8.accept(this,argu);
+        if(n.f8.present()){
+            n.f8.accept(this,argu);
+        }
         //return expr
         String expr_register = n.f10.accept(this,argu);
         String tempRegister = Global.getTempRegister();
@@ -83,9 +93,9 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
 
 
     public String visit(AssignmentStatement n ,String argu){
-        String identifierRegister = "%"+n.f0.f0.tokenImage;
+        String identifierRegister = n.f0.accept(this,argu);
         String classname = argu;
-        String type = Global.ST.lookup(n.f0.f0.tokenImage).get(classname);
+        String type = Global.getFieldType(n.f0.f0.tokenImage, argu);
         String exprRegister = n.f2.accept(this,argu);
         String tempRegister =  Global.getTempRegister();
 
@@ -111,8 +121,8 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
     }
 
     public String visit(PlusExpression n, String argu){
-        String expr1_register = n.f0.accept(this,null);
-        String expr2_register = n.f2.accept(this,null);
+        String expr1_register = n.f0.accept(this,argu);
+        String expr2_register = n.f2.accept(this,argu);
         String tempRegister1 = Global.getTempRegister();
         String tempRegister2 = Global.getTempRegister();
         String tempRegister3 = Global.getTempRegister();
@@ -126,8 +136,8 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
     }
 
     public String visit(MinusExpression n, String argu){
-        String expr1_register = n.f0.accept(this,null);
-        String expr2_register = n.f2.accept(this,null);
+        String expr1_register = n.f0.accept(this,argu);
+        String expr2_register = n.f2.accept(this,argu);
         String tempRegister1 = Global.getTempRegister();
         String tempRegister2 = Global.getTempRegister();
         String tempRegister3 = Global.getTempRegister();
@@ -141,8 +151,8 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
     }
 
     public String visit(TimesExpression n, String argu){
-        String expr1_register = n.f0.accept(this,null);
-        String expr2_register = n.f2.accept(this,null);
+        String expr1_register = n.f0.accept(this,argu);
+        String expr2_register = n.f2.accept(this,argu);
         String tempRegister1 = Global.getTempRegister();
         String tempRegister2 = Global.getTempRegister();
         String tempRegister3 = Global.getTempRegister();
@@ -171,8 +181,8 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
     }
 
     public String visit(VarDeclaration n,String argu){
-        String type = n.f0.accept(this,null);
-        String tempRegister1 = n.f1.accept(this,null);
+        String type = n.f0.accept(this,argu);
+        String tempRegister1 = n.f1.accept(this,argu);
         if(type.equals("int")){
             System.out.println(tempRegister1 + " = alloca i32");
         }else if(type.equals("int[]")){
@@ -207,6 +217,18 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
     }
 
     public String visit(Identifier n, String argu){
+        if(Global.getFieldOffset(n.f0.tokenImage, argu) != -1 && Global.ST.table.current.get(n.f0.tokenImage)==null){
+            String type = Global.javaType2LLVM(Global.getFieldType(n.f0.tokenImage, argu));
+            //System.out.println("test");
+
+            String tempRegister1 = Global.getTempRegister();
+            System.out.println(tempRegister1+" = getelementptr i8,i8* %this, i32 "+(Global.getFieldOffset(n.f0.tokenImage, argu)+8));
+            
+            String tempRegister2 = Global.getTempRegister();
+            System.out.println(tempRegister2+" = bitcast i8* "+tempRegister1+" to "+type +"*");
+            
+            return tempRegister2;
+        }
         return "%"+n.f0.tokenImage;
     }
 
@@ -305,10 +327,8 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
 
         //store address of vtable in object 
         System.out.println("store ["+Global.methodoffsets.get(type).size() +" x i8*]* @."+type+"_vtable, ["+Global.methodoffsets.get(type).size() +" x i8*]** "+tempRegister3);
+        
 
-        //TODO REST OF THE FIELDS
-        
-        
 
         return returnRegister;
     }
@@ -349,17 +369,22 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
         //bitcast from i8* to actual funct type
         System.out.print(tempRegister6+" = bitcast i8* "+tempRegister5+" to "+Global.javaType2LLVM(rettype)+"(" );
         System.out.print("i8* ");
-        for(int i=0;i<argtable.length;i=i+2){
-            System.out.print(","+argtable[i]);
+        if(n.f4.present()){
+            for(int i=0;i<argtable.length;i=i+2){
+                System.out.print(","+argtable[i]);
+            }
         }
         System.out.print(")*\n");
         //call funct TODO args 
-        for(int i=1;i<argtable.length;i=i+2){
-            String tempRegister_loop = Global.getTempRegister();
-            System.out.println(tempRegister_loop+" = load "+argtable[i-1]+ ","+argtable[i-1]+"* "+argtable[i]);
-            argtable[i] = tempRegister_loop;
-
+        if(n.f4.present()){
+            for(int i=1;i<argtable.length;i=i+2){
+                String tempRegister_loop = Global.getTempRegister();
+                System.out.println(tempRegister_loop+" = load "+argtable[i-1]+ ","+argtable[i-1]+"* "+argtable[i]);
+                argtable[i] = tempRegister_loop;
+    
+            }
         }
+        
         String tempRegister8 = Global.getTempRegister();
 
         String tempRegister7 = Global.getTempRegister();
@@ -368,10 +393,14 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
         System.out.print(tempRegister7+" = call "+Global.javaType2LLVM(rettype)+" "+tempRegister6+"(");
 
         System.out.print("i8* "+tempRegister8);
-        for(int i=0;i<argtable.length;i=i+2){
-            System.out.print(","+argtable[i]);
-            System.out.print(" "+argtable[i+1]);
+        
+        if(n.f4.present()){
+            for(int i=0;i<argtable.length;i=i+2){
+                System.out.print(","+argtable[i]);
+                System.out.print(" "+argtable[i+1]);
+            }
         }
+        
 
 
         System.out.print(")\n");

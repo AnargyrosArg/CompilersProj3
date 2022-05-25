@@ -55,6 +55,17 @@ public class Global {
         return type;
     }
 
+    public static int getFieldOffset(String identifiername , String classname){
+        String current_class=classname;
+        while(!current_class.equals(getParentClass(current_class))){
+            if(fieldoffsets.get(classname).get(current_class+"."+identifiername)!=null){
+                return fieldoffsets.get(classname).get(current_class+"."+identifiername);
+            }
+            current_class = getParentClass(current_class);
+        }
+        return -1;
+    }
+
     public static int getMethodOffset(String methodname , String classname){
         String current_class = classname;
         while(methodoffsets.get(classname).get(current_class+"."+methodname)==null){

@@ -45,6 +45,7 @@ public class SymbolTableVisitor extends GJDepthFirst<String[],String[]>{
         value.put(classname, "String[] (main class args, this should never be used)");
         Global.ST.insert(n.f11.accept(this,null)[0], value);
         Global.ST.exit();                                   //EXIT SCOPE
+        Global.fieldoffsets.put(classname, new LinkedHashMap<>());
         return new String[]{"Class: "+ classname};
     }
 

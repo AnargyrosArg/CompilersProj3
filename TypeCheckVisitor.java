@@ -334,7 +334,7 @@ public class TypeCheckVisitor extends GJDepthFirst<String,String>{
             System.exit(-1);
             return null;
         }
-        return expr_type.replace("[]", "");
+        return "int";
     }
 
     public String visit(MessageSend n,String argu){

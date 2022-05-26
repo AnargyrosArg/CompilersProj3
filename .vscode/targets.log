@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Thu May 26 10:03:45 2022
+# Make data base, printed on Thu May 26 16:59:39 2022
 
 # Variables
 
@@ -53,7 +53,7 @@ PATH = /home/anarg/.vscode-server/bin/c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5/b
 # environment
 VSCODE_LOG_STACK = false
 # environment
-VSCODE_IPC_HOOK_CLI = /tmp/vscode-ipc-4d882885-3588-4bd8-b8dc-fb91125b3228.sock
+VSCODE_IPC_HOOK_CLI = /tmp/vscode-ipc-fd8bf5ff-02ca-4c8e-9aa3-f362c188a340.sock
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # environment
@@ -144,10 +144,8 @@ TERM = xterm-256color
 VSCODE_EXTHOST_WILL_SEND_SOCKET = true
 # environment
 WSL_DISTRO_NAME = Ubuntu-20.04
-# environment
-MOTD_SHOWN = update-motd
 # variable set hash-table stats:
-# Load=68/1024=7%, Rehash=0, Collisions=4/96=4%
+# Load=67/1024=7%, Rehash=0, Collisions=4/95=4%
 
 # Pattern-specific Variable Values
 
@@ -254,6 +252,6 @@ clean:
 # strcache performance: lookups = 68 / hit rate = 16%
 # hash-table stats:
 # Load=57/8192=1%, Rehash=0, Collisions=1/68=1%
-# Finished Make data base on Thu May 26 10:03:45 2022
+# Finished Make data base on Thu May 26 16:59:39 2022
 
  

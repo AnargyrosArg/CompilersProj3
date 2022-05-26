@@ -7,13 +7,6 @@ import visitor.GJDepthFirst;
 public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
 
 
-    public String visit(Goal n , String argu){
-        super.visit(n, argu);
-        System.out.println("global OutOfBounds:");
-        System.out.println("call void () @throw_oob()");
-        return null;
-    }
-
     public String visit(MainClass n, String argu){
         Global.ST.nextChild(); //ENTER SCOPE
         System.out.println("define i32 @main(){");
@@ -489,29 +482,34 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
         //load array size
         System.out.println(array_size+" =  load i32 ,i32* "+tempRegister1);
         System.out.println(out_of_bounds_condition+" = icmp slt i32 "+ index_value +", "+array_size);
-        String continuelabel = "continue"+ Global.getLabelTag();
+      
         String OOBlabel = "oob"+Global.getLabelTag();
+        String continuelabel = "continue"+ Global.getLabelTag();
+      
         System.out.println("br i1 "+out_of_bounds_condition+",label %"+continuelabel+", label %"+OOBlabel);
-        System.out.println("continue:");
+        System.out.println(OOBlabel+":");
+        System.out.println("call void () @throw_oob()");
+        System.out.println("br label %"+continuelabel);
+        System.out.println(continuelabel+":");
 
-        // //load value of index
-        // System.out.println(tempRegister1+" = load i32,i32* "+index_register);
+        String tempRegister2 = Global.getTempRegister();
+        String tempRegister3 = Global.getTempRegister();
+        String tempRegister4 = Global.getTempRegister();
+        String tempRegister5 = Global.getTempRegister();
 
-        // //load pointer to pointer to array in heap
-        // System.out.println(tempRegister2+" = getelementptr "+arraytype+","+arraytype+"* "+array_register+", i32 0,i32 1");
 
-        // System.out.println(tempRegister3+" =  load "+element_type+"* ,"+element_type+"** "+tempRegister2);
+        //load pointer to pointer to array in heap
+        System.out.println(tempRegister2+" = getelementptr "+arraytype+","+arraytype+"* "+array_register+", i32 0,i32 1");
 
-        // //load a pointer element in array 
-        // System.out.println(tempRegister4+" = getelementptr "+element_type+" ,"+element_type+"* "+tempRegister3+", i32 "+tempRegister1);
+        System.out.println(tempRegister3+" =  load "+element_type+"* , "+element_type+"** "+tempRegister2);
 
-        // System.out.println(tempRegister5+" = load "+element_type+","+element_type+"*" +tempRegister4);
+        System.out.println(tempRegister4+" = getelementptr "+element_type+" ,"+element_type+"* "+tempRegister3+", i32 "+index_value);
 
-        // //load value to assign
-        // System.out.println(tempRegister6+" = load "+element_type+","+element_type+"* "+assignment_value_register);
 
-        // //store value to element location
-        // System.out.println("store "+element_type+" "+tempRegister6+", "+element_type+"* "+tempRegister4);
+        System.out.println(tempRegister5+" = load "+element_type+" , "+element_type+" *" +assignment_value_register);
+
+        System.out.println("store "+element_type+" "+tempRegister5+" , "+element_type+"* "+tempRegister4);
+
 
         return null;
     }

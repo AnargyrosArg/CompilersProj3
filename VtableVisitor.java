@@ -77,8 +77,12 @@ public class VtableVisitor extends GJDepthFirst<String,String>{
                 type=type.concat("i32 (i8*");
             }else if(methodtype.split(" ")[0].equals("boolean")){
                 type=type.concat("i1 (i8*");
+            }else if(methodtype.split(" ")[0].equals("int[]")){
+                type=type.concat("%.IntArrayType (i8*");
+            }else if(methodtype.split(" ")[0].equals("boolean[]")){
+                type=type.concat("%.BooleanArrayType (i8*");
             }else{
-                type = type.concat("i8* (i8*");
+                type = type.concat("%class."+methodtype.split(" ")[0] + "(i8*");
             }
             for(int i=1;i<methodtype.split(" ").length;i++){
                 if(methodtype.split(" ")[i].equals("int")){
@@ -105,6 +109,8 @@ public class VtableVisitor extends GJDepthFirst<String,String>{
             vtable_decl = vtable_decl.substring(0,vtable_decl.length()-2);
             vtable_decl = vtable_decl.concat("]");
             System.out.println(vtable_decl + "\n");
+        }else{
+            System.out.println("@."+classname+"_vtable = global [0 x i8*] []");
         }
         
 
@@ -161,8 +167,12 @@ public class VtableVisitor extends GJDepthFirst<String,String>{
                 type=type.concat("i32 (i8*");
             }else if(methodtype.split(" ")[0].equals("boolean")){
                 type=type.concat("i1 (i8*");
+            }else if(methodtype.split(" ")[0].equals("int[]")){
+                type=type.concat("%.IntArrayType (i8*");
+            }else if(methodtype.split(" ")[0].equals("boolean[]")){
+                type=type.concat("%.BooleanArrayType (i8*");
             }else{
-                type = type.concat("i8* (i8*");
+                type = type.concat("%class."+methodtype.split(" ")[0] + "(i8*");
             }
             for(int i=1;i<methodtype.split(" ").length;i++){
                 if(methodtype.split(" ")[i].equals("int")){
@@ -193,6 +203,8 @@ public class VtableVisitor extends GJDepthFirst<String,String>{
         vtable_decl = vtable_decl.substring(0,vtable_decl.length()-2);
         vtable_decl = vtable_decl.concat("]");
         System.out.println(vtable_decl + "\n");
+    }else{
+        System.out.println("@."+classname+"_vtable = global [0 x i8*] []");
     }
         return null;
     }

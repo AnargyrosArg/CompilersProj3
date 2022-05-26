@@ -48,7 +48,7 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
         //-------
         if(n.f4.present()){
             String args[] = n.f4.accept(this,argu).split(" ");
-
+            
         for(int i=0;i<args.length;i=i+2){
             System.out.print(","+args[i]+" ");
             System.out.print(args[i+1]+".arg");
@@ -79,13 +79,16 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
             System.out.println("ret i32 "+tempRegister);
         }else if(type.equals("int[]")){
             System.out.println(tempRegister + "= load %.IntArrayType, %.IntArrayType* " +expr_register);
-            System.out.println("ret %.IntArrayType* "+tempRegister);
+            System.out.println("ret %.IntArrayType "+tempRegister);
         }else if(type.equals("boolean")){
             System.out.println(tempRegister + "= load i1, i1* " +expr_register);
             System.out.println("ret i1 "+tempRegister);
         }else if(type.equals("boolean[]")){
             System.out.println(tempRegister + "= load %.BooleanArrayType, %.BooleanArrayType* " +expr_register);
-            System.out.println("ret %.BooleanArrayType* "+tempRegister);
+            System.out.println("ret %.BooleanArrayType "+tempRegister);
+        }else{
+            System.out.println(tempRegister + "= load %class."+methodtype.split(" ")[0]+", %class."+methodtype.split(" ")[0]+"* " +expr_register);
+            System.out.println("ret %class."+methodtype.split(" ")[0]+" "+tempRegister);
         }
         System.out.println("}");
         Global.ST.exit(); //EXIT SCOPE
@@ -658,6 +661,13 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
 
         String tempRegister1 = Global.getTempRegister();
         System.out.println(tempRegister1+" = getelementptr "+arraytype+","+arraytype+"* "+array_register+", i32 0,i32 0");
+        return tempRegister1;
+    }
+
+    public String visit(ThisExpression n, String argu){
+        String tempRegister1 = Global.getTempRegister();
+        System.out.println(tempRegister1+" = bitcast i8* %this to %class."+argu+"*");
+
         return tempRegister1;
     }
 }

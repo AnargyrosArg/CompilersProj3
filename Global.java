@@ -37,7 +37,7 @@ public class Global {
             return "%.IntArrayType";
         }
         else{
-            return "%class."+type;
+            return "%class."+type.replace("%" , "");
         }
     }
     public static LinkedHashMap<String,LinkedHashMap<String,Integer>> fieldoffsets = new LinkedHashMap<String,LinkedHashMap<String,Integer>>();

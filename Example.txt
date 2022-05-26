@@ -1,32 +1,8 @@
 class Overload2 {
     public static void main(String[] args){
-    A a;
-    int i;
-    a =  new A();
-    i=1288;
-    i=a.setID(i);
-    i = a.printID();
+        int[] array;
+        array = new int[10];
+        array[3]=11113;
+        System.out.println(array[3]);
 	}
-}
-
-class A{
-    int id;
-    public int printID(){
-        System.out.println(id);
-        return id;
-    }
-    public int setID(int i){
-        id=i;
-        id=23;
-        return id;
-    }
-}
-
-class B extends A{
-    int id2;
-    public int foo(){
-        int id;
-        id = id2;
-        return id;
-    }
 }

@@ -11,6 +11,13 @@ public class Global {
         RegisterCounter=1;
     }
 
+    public static int labelTag=0;
+
+    public static int getLabelTag(){
+        labelTag++;
+        return labelTag;
+    }
+
     public static String getTempRegister(){
         String register = "%"+RegisterCounter;
         RegisterCounter++;

@@ -6,6 +6,14 @@ import visitor.GJDepthFirst;
 
 public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
 
+
+    public String visit(Goal n , String argu){
+        super.visit(n, argu);
+        System.out.println("global OutOfBounds:");
+        System.out.println("call void () @throw_oob()");
+        return null;
+    }
+
     public String visit(MainClass n, String argu){
         Global.ST.nextChild(); //ENTER SCOPE
         System.out.println("define i32 @main(){");
@@ -105,7 +113,16 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
         }else if(type.equals("boolean")){
             System.out.println(tempRegister + "= load i1, i1* " +exprRegister);
             System.out.println("store i1 "+tempRegister+" , i1* "+identifierRegister);
-        }else{
+        }
+        else if(type.equals("boolean[]")){
+            System.out.println(tempRegister + "= load %.BooleanArrayType, %.BooleanArrayType* " +exprRegister);
+            System.out.println("store %.BooleanArrayType "+tempRegister+" , %.BooleanArrayType* "+identifierRegister);
+        }
+        else if(type.equals("int[]")){
+            System.out.println(tempRegister + "= load %.IntArrayType, %.IntArrayType* " +exprRegister);
+            System.out.println("store %.IntArrayType "+tempRegister+" , %.IntArrayType* "+identifierRegister);
+        }
+        else{
             System.out.println(tempRegister + "= load %class."+type+", %class."+type+"* " +exprRegister);
             System.out.println("store %class."+type+" "+tempRegister+" , %class."+type+"* "+identifierRegister);
         }
@@ -400,15 +417,139 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
                 System.out.print(" "+argtable[i+1]);
             }
         }
-        
-
 
         System.out.print(")\n");
         //return register
         System.out.println(returnRegister+" = alloca "+Global.javaType2LLVM(rettype)+"");
         System.out.println("store "+Global.javaType2LLVM(rettype)+" "+tempRegister7 +", "+Global.javaType2LLVM(rettype)+"* "+returnRegister);
 
-
         return returnRegister;
+    }
+
+
+    public String visit(IntegerArrayAllocationExpression n ,String argu){
+        String expr_register = n.f3.accept(this,argu);
+        String tempRegister1 = Global.getTempRegister();
+        String tempRegister2 = Global.getTempRegister();
+        String tempRegister3 = Global.getTempRegister();
+        String tempRegister4 = Global.getTempRegister();
+        String tempRegister5 = Global.getTempRegister();
+        String tempRegister6 = Global.getTempRegister();
+
+
+
+        //allocate room in stack for array type -> a pointer for the actual array and an integer for its size
+        System.out.println(tempRegister1+" = alloca %.IntArrayType");
+        //load size of array integer
+        System.out.println(tempRegister2+" = load i32 ,i32* "+expr_register);
+        //allocate room in heap for actual array
+        System.out.println(tempRegister3+" = call i8* @calloc(i32 32 , i32 "+ tempRegister2 +")");
+        //cast to integer array type
+        System.out.println(tempRegister4+" = bitcast i8* "+tempRegister3+" to i32*");
+
+        //get pointers to pointer of array and to size
+        System.out.println(tempRegister5+" = getelementptr %.IntArrayType,%.IntArrayType* "+tempRegister1+",i32 0,i32 1");
+        System.out.println(tempRegister6+" = getelementptr %.IntArrayType,%.IntArrayType* "+tempRegister1+",i32 0,i32 0");
+
+        //store size on size pointer
+        System.out.println("store i32 "+tempRegister2+",i32* "+tempRegister6);
+        //store pointer to heap array
+        System.out.println("store i32* "+tempRegister4+", i32** "+tempRegister5);
+
+        return tempRegister1;
+    }
+
+
+    public String visit(ArrayAssignmentStatement n , String argu){
+        String assignment_value_register = n.f5.accept(this,argu);
+        String array_register = n.f0.accept(this,argu);
+        String index_register = n.f2.accept(this,argu);
+
+        String type = Global.ST.lookup(n.f0.f0.tokenImage).get(argu);
+        String arraytype="";
+        String element_type="";
+        if(type.equals("int[]")){
+            arraytype="%.IntArrayType";
+            element_type="i32";
+        }else if(type.equals("boolean[]")){
+            arraytype="%.BooleanArrayType";
+            element_type="i1";
+        }
+
+        String index_value = Global.getTempRegister();
+        String tempRegister1 = Global.getTempRegister();
+        String array_size = Global.getTempRegister();
+        String out_of_bounds_condition = Global.getTempRegister();
+
+        System.out.println(index_value+" = load i32,i32* "+index_register);
+
+        //ptr to array size
+        System.out.println(tempRegister1+" = getelementptr "+arraytype+","+arraytype+"* "+array_register+", i32 0,i32 0");
+
+        //load array size
+        System.out.println(array_size+" =  load i32 ,i32* "+tempRegister1);
+        System.out.println(out_of_bounds_condition+" = icmp slt i32 "+ index_value +", "+array_size);
+        String continuelabel = "continue"+ Global.getLabelTag();
+        String OOBlabel = "oob"+Global.getLabelTag();
+        System.out.println("br i1 "+out_of_bounds_condition+",label %"+continuelabel+", label %"+OOBlabel);
+        System.out.println("continue:");
+
+        // //load value of index
+        // System.out.println(tempRegister1+" = load i32,i32* "+index_register);
+
+        // //load pointer to pointer to array in heap
+        // System.out.println(tempRegister2+" = getelementptr "+arraytype+","+arraytype+"* "+array_register+", i32 0,i32 1");
+
+        // System.out.println(tempRegister3+" =  load "+element_type+"* ,"+element_type+"** "+tempRegister2);
+
+        // //load a pointer element in array 
+        // System.out.println(tempRegister4+" = getelementptr "+element_type+" ,"+element_type+"* "+tempRegister3+", i32 "+tempRegister1);
+
+        // System.out.println(tempRegister5+" = load "+element_type+","+element_type+"*" +tempRegister4);
+
+        // //load value to assign
+        // System.out.println(tempRegister6+" = load "+element_type+","+element_type+"* "+assignment_value_register);
+
+        // //store value to element location
+        // System.out.println("store "+element_type+" "+tempRegister6+", "+element_type+"* "+tempRegister4);
+
+        return null;
+    }
+
+    public String visit(ArrayLookup n , String argu){   
+        String type = Global.evaluated_expression.get(n.f0.toString());
+        String array_register = n.f0.accept(this,argu);
+        String index_register =  n.f2.accept(this,argu);
+        String arraytype="";
+        String element_type="";
+        if(type.equals("int[]")){
+            arraytype="%.IntArrayType";
+            element_type="i32";
+        }else if(type.equals("boolean[]")){
+            arraytype="%.BooleanArrayType";
+            element_type="i1";
+        }
+        String tempRegister0 = Global.getTempRegister();
+
+        String tempRegister1 = Global.getTempRegister();
+        String tempRegister2 = Global.getTempRegister();
+        String tempRegister3 = Global.getTempRegister();
+      //  String tempRegister4 = Global.getTempRegister();
+
+
+        System.out.println(tempRegister0+" = load i32,i32* "+index_register);
+        //load pointer to pointer to array in heap
+        System.out.println(tempRegister1+" = getelementptr "+arraytype+","+arraytype+"* "+array_register+", i32 0,i32 1");
+
+        System.out.println(tempRegister2+" = load "+element_type+"*,"+element_type+"**" +tempRegister1);
+        
+        System.out.println(tempRegister3+" = getelementptr "+element_type+" ,"+element_type+"* "+tempRegister2+", i32 "+tempRegister0);
+       
+      //  System.out.println(tempRegister4+" = load "+element_type+"*,"+element_type+"**" +tempRegister3);
+
+
+
+
+        return tempRegister3;
     }
 }

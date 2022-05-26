@@ -61,9 +61,11 @@ public class VtableVisitor extends GJDepthFirst<String,String>{
             }
             
         }
+        
         typeBuilder.replace(typeBuilder.length()-2, typeBuilder.length(), "}");
         System.out.println(typeBuilder);
         Set<String> methods = Global.methodoffsets.get(classname).keySet();
+        if(methods.size()!=0){
         System.out.print("@."+classname+"_vtable = global ["+ methods.size()+"x i8*] [");
         String vtable_decl = "";
     
@@ -99,9 +101,12 @@ public class VtableVisitor extends GJDepthFirst<String,String>{
             type = type.concat(")*");
             vtable_decl = vtable_decl.concat(type+" @"+method+ " to i8*),\n");
         }
-        vtable_decl = vtable_decl.substring(0,vtable_decl.length()-2);
-        vtable_decl = vtable_decl.concat("]");
-        System.out.println(vtable_decl + "\n");
+        
+            vtable_decl = vtable_decl.substring(0,vtable_decl.length()-2);
+            vtable_decl = vtable_decl.concat("]");
+            System.out.println(vtable_decl + "\n");
+        }
+        
 
         return null;
     }
@@ -143,6 +148,7 @@ public class VtableVisitor extends GJDepthFirst<String,String>{
         typeBuilder.replace(typeBuilder.length()-2, typeBuilder.length(), "}");
         System.out.println(typeBuilder);
         Set<String> methods = Global.methodoffsets.get(classname).keySet();
+        if(methods.size()!=0){
         System.out.print("@."+classname+"_vtable = global ["+ methods.size()+"x i8*] [");
         String vtable_decl = "";
         
@@ -187,6 +193,7 @@ public class VtableVisitor extends GJDepthFirst<String,String>{
         vtable_decl = vtable_decl.substring(0,vtable_decl.length()-2);
         vtable_decl = vtable_decl.concat("]");
         System.out.println(vtable_decl + "\n");
+    }
         return null;
     }
 

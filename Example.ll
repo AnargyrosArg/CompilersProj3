@@ -166,370 +166,379 @@ continue10:
 %80 = getelementptr i1 ,i1* %79, i32 %74
 %81 = load i1 , i1 *%flag
 store i1 %81 , i1* %80
-%82= load i1, i1* null
-store i1 %82 , i1* %flag
-%83 = alloca i32
-store i32 1, i32* %83
-%84= load i32, i32* %i
-%85= load i32, i32* %83
-%86 = add i32 %84, %85
-%87 = alloca i32
-store i32 %86, i32* %87
-%88= load i32, i32* %87
-store i32 %88 , i32* %i
+%82 = load i1,i1* %flag
+br i1 %82, label %setfalse12, label %settrue11
+settrue11:
+store i1 1, i1* %flag
+br label %continue13
+setfalse12:
+store i1 0, i1* %flag
+br label %continue13
+continue13:
+%83= load i1, i1* %flag
+store i1 %83 , i1* %flag
+%84 = alloca i32
+store i32 1, i32* %84
+%85= load i32, i32* %i
+%86= load i32, i32* %84
+%87 = add i32 %85, %86
+%88 = alloca i32
+store i32 %87, i32* %88
+%89= load i32, i32* %88
+store i32 %89 , i32* %i
 br label %loopstart6
 endloop8:
-%89 = alloca i32
-store i32 1024, i32* %89
-%90 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
-%91 = load i8* , i8** %90
-%92 = bitcast i8* %91 to [6 x i8*]*
-%93 = getelementptr [6 x i8*], [6 x i8*]* %92, i32 0 , i32 0
-%94 = load i8* , i8** %93
-%95 = bitcast i8* %94 to i32(i8* ,i32)*
-%96 = load i32,i32* %89
-%97 = bitcast %class.A* %a to i8*
-%98 = call i32 %95(i8* %97,i32 %96)
-%99 = alloca i32
-store i32 %98, i32* %99
-%100 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
-%101 = load i8* , i8** %100
-%102 = bitcast i8* %101 to [6 x i8*]*
-%103 = getelementptr [6 x i8*], [6 x i8*]* %102, i32 0 , i32 0
-%104 = load i8* , i8** %103
-%105 = bitcast i8* %104 to i32(i8* ,i32)*
-%106 = load i32,i32* %99
-%107 = bitcast %class.A* %a to i8*
-%108 = call i32 %105(i8* %107,i32 %106)
-%109 = alloca i32
-store i32 %108, i32* %109
-%110 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
-%111 = load i8* , i8** %110
-%112 = bitcast i8* %111 to [6 x i8*]*
-%113 = getelementptr [6 x i8*], [6 x i8*]* %112, i32 0 , i32 0
-%114 = load i8* , i8** %113
-%115 = bitcast i8* %114 to i32(i8* ,i32)*
-%116 = load i32,i32* %109
-%117 = bitcast %class.A* %a to i8*
-%118 = call i32 %115(i8* %117,i32 %116)
-%119 = alloca i32
-store i32 %118, i32* %119
-%120 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
-%121 = load i8* , i8** %120
-%122 = bitcast i8* %121 to [6 x i8*]*
-%123 = getelementptr [6 x i8*], [6 x i8*]* %122, i32 0 , i32 0
-%124 = load i8* , i8** %123
-%125 = bitcast i8* %124 to i32(i8* ,i32)*
-%126 = load i32,i32* %119
-%127 = bitcast %class.A* %a to i8*
-%128 = call i32 %125(i8* %127,i32 %126)
-%129 = alloca i32
-store i32 %128, i32* %129
-%130 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
-%131 = load i8* , i8** %130
-%132 = bitcast i8* %131 to [6 x i8*]*
-%133 = getelementptr [6 x i8*], [6 x i8*]* %132, i32 0 , i32 0
-%134 = load i8* , i8** %133
-%135 = bitcast i8* %134 to i32(i8* ,i32)*
-%136 = load i32,i32* %129
-%137 = bitcast %class.A* %a to i8*
-%138 = call i32 %135(i8* %137,i32 %136)
-%139 = alloca i32
-store i32 %138, i32* %139
-%140 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
-%141 = load i8* , i8** %140
-%142 = bitcast i8* %141 to [6 x i8*]*
-%143 = getelementptr [6 x i8*], [6 x i8*]* %142, i32 0 , i32 0
-%144 = load i8* , i8** %143
-%145 = bitcast i8* %144 to i32(i8* ,i32)*
-%146 = load i32,i32* %139
-%147 = bitcast %class.A* %a to i8*
-%148 = call i32 %145(i8* %147,i32 %146)
-%149 = alloca i32
-store i32 %148, i32* %149
-%150 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
-%151 = load i8* , i8** %150
-%152 = bitcast i8* %151 to [6 x i8*]*
-%153 = getelementptr [6 x i8*], [6 x i8*]* %152, i32 0 , i32 0
-%154 = load i8* , i8** %153
-%155 = bitcast i8* %154 to i32(i8* ,i32)*
-%156 = load i32,i32* %149
-%157 = bitcast %class.A* %a to i8*
-%158 = call i32 %155(i8* %157,i32 %156)
-%159 = alloca i32
-store i32 %158, i32* %159
-%160 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
-%161 = load i8* , i8** %160
-%162 = bitcast i8* %161 to [6 x i8*]*
-%163 = getelementptr [6 x i8*], [6 x i8*]* %162, i32 0 , i32 1
-%164 = load i8* , i8** %163
-%165 = bitcast i8* %164 to %.IntArrayType(i8* ,%.IntArrayType)*
-%166 = load %.IntArrayType,%.IntArrayType* %int_array
-%167 = bitcast %class.A* %a to i8*
-%168 = call %.IntArrayType %165(i8* %167,%.IntArrayType %166)
-%169 = alloca %.IntArrayType
-store %.IntArrayType %168, %.IntArrayType* %169
-%170 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
-%171 = load i8* , i8** %170
-%172 = bitcast i8* %171 to [6 x i8*]*
-%173 = getelementptr [6 x i8*], [6 x i8*]* %172, i32 0 , i32 1
-%174 = load i8* , i8** %173
-%175 = bitcast i8* %174 to %.IntArrayType(i8* ,%.IntArrayType)*
-%176 = load %.IntArrayType,%.IntArrayType* %169
-%177 = bitcast %class.A* %a to i8*
-%178 = call %.IntArrayType %175(i8* %177,%.IntArrayType %176)
-%179 = alloca %.IntArrayType
-store %.IntArrayType %178, %.IntArrayType* %179
-%180 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
-%181 = load i8* , i8** %180
-%182 = bitcast i8* %181 to [6 x i8*]*
-%183 = getelementptr [6 x i8*], [6 x i8*]* %182, i32 0 , i32 1
-%184 = load i8* , i8** %183
-%185 = bitcast i8* %184 to %.IntArrayType(i8* ,%.IntArrayType)*
-%186 = load %.IntArrayType,%.IntArrayType* %179
-%187 = bitcast %class.A* %a to i8*
-%188 = call %.IntArrayType %185(i8* %187,%.IntArrayType %186)
-%189 = alloca %.IntArrayType
-store %.IntArrayType %188, %.IntArrayType* %189
-%190 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
-%191 = load i8* , i8** %190
-%192 = bitcast i8* %191 to [6 x i8*]*
-%193 = getelementptr [6 x i8*], [6 x i8*]* %192, i32 0 , i32 1
-%194 = load i8* , i8** %193
-%195 = bitcast i8* %194 to %.IntArrayType(i8* ,%.IntArrayType)*
-%196 = load %.IntArrayType,%.IntArrayType* %189
-%197 = bitcast %class.A* %a to i8*
-%198 = call %.IntArrayType %195(i8* %197,%.IntArrayType %196)
-%199 = alloca %.IntArrayType
-store %.IntArrayType %198, %.IntArrayType* %199
-%200 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
-%201 = load i8* , i8** %200
-%202 = bitcast i8* %201 to [6 x i8*]*
-%203 = getelementptr [6 x i8*], [6 x i8*]* %202, i32 0 , i32 1
-%204 = load i8* , i8** %203
-%205 = bitcast i8* %204 to %.IntArrayType(i8* ,%.IntArrayType)*
-%206 = load %.IntArrayType,%.IntArrayType* %199
-%207 = bitcast %class.A* %a to i8*
-%208 = call %.IntArrayType %205(i8* %207,%.IntArrayType %206)
-%209 = alloca %.IntArrayType
-store %.IntArrayType %208, %.IntArrayType* %209
-%210 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
-%211 = load i8* , i8** %210
-%212 = bitcast i8* %211 to [6 x i8*]*
-%213 = getelementptr [6 x i8*], [6 x i8*]* %212, i32 0 , i32 1
-%214 = load i8* , i8** %213
-%215 = bitcast i8* %214 to %.IntArrayType(i8* ,%.IntArrayType)*
-%216 = load %.IntArrayType,%.IntArrayType* %209
-%217 = bitcast %class.A* %a to i8*
-%218 = call %.IntArrayType %215(i8* %217,%.IntArrayType %216)
-%219 = alloca %.IntArrayType
-store %.IntArrayType %218, %.IntArrayType* %219
-%220 = alloca i1
-store i1 1, i1* %220
-%221 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
-%222 = load i8* , i8** %221
-%223 = bitcast i8* %222 to [6 x i8*]*
-%224 = getelementptr [6 x i8*], [6 x i8*]* %223, i32 0 , i32 2
-%225 = load i8* , i8** %224
-%226 = bitcast i8* %225 to i1(i8* ,i1)*
-%227 = load i1,i1* %220
-%228 = bitcast %class.A* %a to i8*
-%229 = call i1 %226(i8* %228,i1 %227)
-%230 = alloca i1
-store i1 %229, i1* %230
-%231 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
-%232 = load i8* , i8** %231
-%233 = bitcast i8* %232 to [6 x i8*]*
-%234 = getelementptr [6 x i8*], [6 x i8*]* %233, i32 0 , i32 2
-%235 = load i8* , i8** %234
-%236 = bitcast i8* %235 to i1(i8* ,i1)*
-%237 = load i1,i1* %230
-%238 = bitcast %class.A* %a to i8*
-%239 = call i1 %236(i8* %238,i1 %237)
-%240 = alloca i1
-store i1 %239, i1* %240
-%241 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
-%242 = load i8* , i8** %241
-%243 = bitcast i8* %242 to [6 x i8*]*
-%244 = getelementptr [6 x i8*], [6 x i8*]* %243, i32 0 , i32 2
-%245 = load i8* , i8** %244
-%246 = bitcast i8* %245 to i1(i8* ,i1)*
-%247 = load i1,i1* %240
-%248 = bitcast %class.A* %a to i8*
-%249 = call i1 %246(i8* %248,i1 %247)
-%250 = alloca i1
-store i1 %249, i1* %250
-%251 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
-%252 = load i8* , i8** %251
-%253 = bitcast i8* %252 to [6 x i8*]*
-%254 = getelementptr [6 x i8*], [6 x i8*]* %253, i32 0 , i32 2
-%255 = load i8* , i8** %254
-%256 = bitcast i8* %255 to i1(i8* ,i1)*
-%257 = load i1,i1* %250
-%258 = bitcast %class.A* %a to i8*
-%259 = call i1 %256(i8* %258,i1 %257)
-%260 = alloca i1
-store i1 %259, i1* %260
-%261 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
-%262 = load i8* , i8** %261
-%263 = bitcast i8* %262 to [6 x i8*]*
-%264 = getelementptr [6 x i8*], [6 x i8*]* %263, i32 0 , i32 2
-%265 = load i8* , i8** %264
-%266 = bitcast i8* %265 to i1(i8* ,i1)*
-%267 = load i1,i1* %260
-%268 = bitcast %class.A* %a to i8*
-%269 = call i1 %266(i8* %268,i1 %267)
-%270 = alloca i1
-store i1 %269, i1* %270
-%271 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
-%272 = load i8* , i8** %271
-%273 = bitcast i8* %272 to [6 x i8*]*
-%274 = getelementptr [6 x i8*], [6 x i8*]* %273, i32 0 , i32 2
-%275 = load i8* , i8** %274
-%276 = bitcast i8* %275 to i1(i8* ,i1)*
-%277 = load i1,i1* %270
-%278 = bitcast %class.A* %a to i8*
-%279 = call i1 %276(i8* %278,i1 %277)
-%280 = alloca i1
-store i1 %279, i1* %280
-%281 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
-%282 = load i8* , i8** %281
-%283 = bitcast i8* %282 to [6 x i8*]*
-%284 = getelementptr [6 x i8*], [6 x i8*]* %283, i32 0 , i32 2
-%285 = load i8* , i8** %284
-%286 = bitcast i8* %285 to i1(i8* ,i1)*
-%287 = load i1,i1* %280
-%288 = bitcast %class.A* %a to i8*
-%289 = call i1 %286(i8* %288,i1 %287)
-%290 = alloca i1
-store i1 %289, i1* %290
-%291 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
-%292 = load i8* , i8** %291
-%293 = bitcast i8* %292 to [6 x i8*]*
-%294 = getelementptr [6 x i8*], [6 x i8*]* %293, i32 0 , i32 3
-%295 = load i8* , i8** %294
-%296 = bitcast i8* %295 to %.BooleanArrayType(i8* ,%.BooleanArrayType)*
-%297 = load %.BooleanArrayType,%.BooleanArrayType* %boolean_array
-%298 = bitcast %class.A* %a to i8*
-%299 = call %.BooleanArrayType %296(i8* %298,%.BooleanArrayType %297)
-%300 = alloca %.BooleanArrayType
-store %.BooleanArrayType %299, %.BooleanArrayType* %300
-%301 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
-%302 = load i8* , i8** %301
-%303 = bitcast i8* %302 to [6 x i8*]*
-%304 = getelementptr [6 x i8*], [6 x i8*]* %303, i32 0 , i32 3
-%305 = load i8* , i8** %304
-%306 = bitcast i8* %305 to %.BooleanArrayType(i8* ,%.BooleanArrayType)*
-%307 = load %.BooleanArrayType,%.BooleanArrayType* %300
-%308 = bitcast %class.A* %a to i8*
-%309 = call %.BooleanArrayType %306(i8* %308,%.BooleanArrayType %307)
-%310 = alloca %.BooleanArrayType
-store %.BooleanArrayType %309, %.BooleanArrayType* %310
-%311 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
-%312 = load i8* , i8** %311
-%313 = bitcast i8* %312 to [6 x i8*]*
-%314 = getelementptr [6 x i8*], [6 x i8*]* %313, i32 0 , i32 3
-%315 = load i8* , i8** %314
-%316 = bitcast i8* %315 to %.BooleanArrayType(i8* ,%.BooleanArrayType)*
-%317 = load %.BooleanArrayType,%.BooleanArrayType* %310
-%318 = bitcast %class.A* %a to i8*
-%319 = call %.BooleanArrayType %316(i8* %318,%.BooleanArrayType %317)
-%320 = alloca %.BooleanArrayType
-store %.BooleanArrayType %319, %.BooleanArrayType* %320
-%321 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
-%322 = load i8* , i8** %321
-%323 = bitcast i8* %322 to [6 x i8*]*
-%324 = getelementptr [6 x i8*], [6 x i8*]* %323, i32 0 , i32 3
-%325 = load i8* , i8** %324
-%326 = bitcast i8* %325 to %.BooleanArrayType(i8* ,%.BooleanArrayType)*
-%327 = load %.BooleanArrayType,%.BooleanArrayType* %320
-%328 = bitcast %class.A* %a to i8*
-%329 = call %.BooleanArrayType %326(i8* %328,%.BooleanArrayType %327)
-%330 = alloca %.BooleanArrayType
-store %.BooleanArrayType %329, %.BooleanArrayType* %330
-%331 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
-%332 = load i8* , i8** %331
-%333 = bitcast i8* %332 to [6 x i8*]*
-%334 = getelementptr [6 x i8*], [6 x i8*]* %333, i32 0 , i32 3
-%335 = load i8* , i8** %334
-%336 = bitcast i8* %335 to %.BooleanArrayType(i8* ,%.BooleanArrayType)*
-%337 = load %.BooleanArrayType,%.BooleanArrayType* %330
-%338 = bitcast %class.A* %a to i8*
-%339 = call %.BooleanArrayType %336(i8* %338,%.BooleanArrayType %337)
-%340 = alloca %.BooleanArrayType
-store %.BooleanArrayType %339, %.BooleanArrayType* %340
-%341 = getelementptr inbounds %class.B, %class.B* %b, i32 0, i32 0
-%342 = load i8* , i8** %341
-%343 = bitcast i8* %342 to [3 x i8*]*
-%344 = getelementptr [3 x i8*], [3 x i8*]* %343, i32 0 , i32 2
-%345 = load i8* , i8** %344
-%346 = bitcast i8* %345 to %class.B(i8* ,%class.B)*
-%347 = load %class.B,%class.B* %b
-%348 = bitcast %class.B* %b to i8*
-%349 = call %class.B %346(i8* %348,%class.B %347)
-%350 = alloca %class.B
-store %class.B %349, %class.B* %350
-%351 = getelementptr inbounds %class.B, %class.B* %b, i32 0, i32 0
-%352 = load i8* , i8** %351
-%353 = bitcast i8* %352 to [3 x i8*]*
-%354 = getelementptr [3 x i8*], [3 x i8*]* %353, i32 0 , i32 2
-%355 = load i8* , i8** %354
-%356 = bitcast i8* %355 to %class.B(i8* ,%class.B)*
-%357 = load %class.B,%class.B* %350
-%358 = bitcast %class.B* %b to i8*
-%359 = call %class.B %356(i8* %358,%class.B %357)
-%360 = alloca %class.B
-store %class.B %359, %class.B* %360
-%361 = getelementptr inbounds %class.B, %class.B* %b, i32 0, i32 0
-%362 = load i8* , i8** %361
-%363 = bitcast i8* %362 to [3 x i8*]*
-%364 = getelementptr [3 x i8*], [3 x i8*]* %363, i32 0 , i32 2
-%365 = load i8* , i8** %364
-%366 = bitcast i8* %365 to %class.B(i8* ,%class.B)*
-%367 = load %class.B,%class.B* %360
-%368 = bitcast %class.B* %b to i8*
-%369 = call %class.B %366(i8* %368,%class.B %367)
-%370 = alloca %class.B
-store %class.B %369, %class.B* %370
-%371 = getelementptr inbounds %class.B, %class.B* %b, i32 0, i32 0
-%372 = load i8* , i8** %371
-%373 = bitcast i8* %372 to [3 x i8*]*
-%374 = getelementptr [3 x i8*], [3 x i8*]* %373, i32 0 , i32 2
-%375 = load i8* , i8** %374
-%376 = bitcast i8* %375 to %class.B(i8* ,%class.B)*
-%377 = load %class.B,%class.B* %370
-%378 = bitcast %class.B* %b to i8*
-%379 = call %class.B %376(i8* %378,%class.B %377)
-%380 = alloca %class.B
-store %class.B %379, %class.B* %380
-%381 = getelementptr inbounds %class.B, %class.B* %b, i32 0, i32 0
-%382 = load i8* , i8** %381
-%383 = bitcast i8* %382 to [3 x i8*]*
-%384 = getelementptr [3 x i8*], [3 x i8*]* %383, i32 0 , i32 2
-%385 = load i8* , i8** %384
-%386 = bitcast i8* %385 to %class.B(i8* ,%class.B)*
-%387 = load %class.B,%class.B* %380
-%388 = bitcast %class.B* %b to i8*
-%389 = call %class.B %386(i8* %388,%class.B %387)
-%390 = alloca %class.B
-store %class.B %389, %class.B* %390
-%391 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
-%392 = load i8* , i8** %391
-%393 = bitcast i8* %392 to [6 x i8*]*
-%394 = getelementptr [6 x i8*], [6 x i8*]* %393, i32 0 , i32 5
-%395 = load i8* , i8** %394
-%396 = bitcast i8* %395 to i32(i8* ,i32,%.IntArrayType,i1,%.BooleanArrayType,%class.B)*
-%397 = load i32,i32* %159
-%398 = load %.IntArrayType,%.IntArrayType* %219
-%399 = load i1,i1* %290
-%400 = load %.BooleanArrayType,%.BooleanArrayType* %340
-%401 = load %class.B,%class.B* %390
-%402 = bitcast %class.A* %a to i8*
-%403 = call i32 %396(i8* %402,i32 %397,%.IntArrayType %398,i1 %399,%.BooleanArrayType %400,%class.B %401)
-%404 = alloca i32
-store i32 %403, i32* %404
-%405= load i32, i32* %404
-store i32 %405 , i32* %i
+%90 = alloca i32
+store i32 1024, i32* %90
+%91 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
+%92 = load i8* , i8** %91
+%93 = bitcast i8* %92 to [6 x i8*]*
+%94 = getelementptr [6 x i8*], [6 x i8*]* %93, i32 0 , i32 0
+%95 = load i8* , i8** %94
+%96 = bitcast i8* %95 to i32(i8* ,i32)*
+%97 = load i32,i32* %90
+%98 = bitcast %class.A* %a to i8*
+%99 = call i32 %96(i8* %98,i32 %97)
+%100 = alloca i32
+store i32 %99, i32* %100
+%101 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
+%102 = load i8* , i8** %101
+%103 = bitcast i8* %102 to [6 x i8*]*
+%104 = getelementptr [6 x i8*], [6 x i8*]* %103, i32 0 , i32 0
+%105 = load i8* , i8** %104
+%106 = bitcast i8* %105 to i32(i8* ,i32)*
+%107 = load i32,i32* %100
+%108 = bitcast %class.A* %a to i8*
+%109 = call i32 %106(i8* %108,i32 %107)
+%110 = alloca i32
+store i32 %109, i32* %110
+%111 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
+%112 = load i8* , i8** %111
+%113 = bitcast i8* %112 to [6 x i8*]*
+%114 = getelementptr [6 x i8*], [6 x i8*]* %113, i32 0 , i32 0
+%115 = load i8* , i8** %114
+%116 = bitcast i8* %115 to i32(i8* ,i32)*
+%117 = load i32,i32* %110
+%118 = bitcast %class.A* %a to i8*
+%119 = call i32 %116(i8* %118,i32 %117)
+%120 = alloca i32
+store i32 %119, i32* %120
+%121 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
+%122 = load i8* , i8** %121
+%123 = bitcast i8* %122 to [6 x i8*]*
+%124 = getelementptr [6 x i8*], [6 x i8*]* %123, i32 0 , i32 0
+%125 = load i8* , i8** %124
+%126 = bitcast i8* %125 to i32(i8* ,i32)*
+%127 = load i32,i32* %120
+%128 = bitcast %class.A* %a to i8*
+%129 = call i32 %126(i8* %128,i32 %127)
+%130 = alloca i32
+store i32 %129, i32* %130
+%131 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
+%132 = load i8* , i8** %131
+%133 = bitcast i8* %132 to [6 x i8*]*
+%134 = getelementptr [6 x i8*], [6 x i8*]* %133, i32 0 , i32 0
+%135 = load i8* , i8** %134
+%136 = bitcast i8* %135 to i32(i8* ,i32)*
+%137 = load i32,i32* %130
+%138 = bitcast %class.A* %a to i8*
+%139 = call i32 %136(i8* %138,i32 %137)
+%140 = alloca i32
+store i32 %139, i32* %140
+%141 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
+%142 = load i8* , i8** %141
+%143 = bitcast i8* %142 to [6 x i8*]*
+%144 = getelementptr [6 x i8*], [6 x i8*]* %143, i32 0 , i32 0
+%145 = load i8* , i8** %144
+%146 = bitcast i8* %145 to i32(i8* ,i32)*
+%147 = load i32,i32* %140
+%148 = bitcast %class.A* %a to i8*
+%149 = call i32 %146(i8* %148,i32 %147)
+%150 = alloca i32
+store i32 %149, i32* %150
+%151 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
+%152 = load i8* , i8** %151
+%153 = bitcast i8* %152 to [6 x i8*]*
+%154 = getelementptr [6 x i8*], [6 x i8*]* %153, i32 0 , i32 0
+%155 = load i8* , i8** %154
+%156 = bitcast i8* %155 to i32(i8* ,i32)*
+%157 = load i32,i32* %150
+%158 = bitcast %class.A* %a to i8*
+%159 = call i32 %156(i8* %158,i32 %157)
+%160 = alloca i32
+store i32 %159, i32* %160
+%161 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
+%162 = load i8* , i8** %161
+%163 = bitcast i8* %162 to [6 x i8*]*
+%164 = getelementptr [6 x i8*], [6 x i8*]* %163, i32 0 , i32 1
+%165 = load i8* , i8** %164
+%166 = bitcast i8* %165 to %.IntArrayType(i8* ,%.IntArrayType)*
+%167 = load %.IntArrayType,%.IntArrayType* %int_array
+%168 = bitcast %class.A* %a to i8*
+%169 = call %.IntArrayType %166(i8* %168,%.IntArrayType %167)
+%170 = alloca %.IntArrayType
+store %.IntArrayType %169, %.IntArrayType* %170
+%171 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
+%172 = load i8* , i8** %171
+%173 = bitcast i8* %172 to [6 x i8*]*
+%174 = getelementptr [6 x i8*], [6 x i8*]* %173, i32 0 , i32 1
+%175 = load i8* , i8** %174
+%176 = bitcast i8* %175 to %.IntArrayType(i8* ,%.IntArrayType)*
+%177 = load %.IntArrayType,%.IntArrayType* %170
+%178 = bitcast %class.A* %a to i8*
+%179 = call %.IntArrayType %176(i8* %178,%.IntArrayType %177)
+%180 = alloca %.IntArrayType
+store %.IntArrayType %179, %.IntArrayType* %180
+%181 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
+%182 = load i8* , i8** %181
+%183 = bitcast i8* %182 to [6 x i8*]*
+%184 = getelementptr [6 x i8*], [6 x i8*]* %183, i32 0 , i32 1
+%185 = load i8* , i8** %184
+%186 = bitcast i8* %185 to %.IntArrayType(i8* ,%.IntArrayType)*
+%187 = load %.IntArrayType,%.IntArrayType* %180
+%188 = bitcast %class.A* %a to i8*
+%189 = call %.IntArrayType %186(i8* %188,%.IntArrayType %187)
+%190 = alloca %.IntArrayType
+store %.IntArrayType %189, %.IntArrayType* %190
+%191 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
+%192 = load i8* , i8** %191
+%193 = bitcast i8* %192 to [6 x i8*]*
+%194 = getelementptr [6 x i8*], [6 x i8*]* %193, i32 0 , i32 1
+%195 = load i8* , i8** %194
+%196 = bitcast i8* %195 to %.IntArrayType(i8* ,%.IntArrayType)*
+%197 = load %.IntArrayType,%.IntArrayType* %190
+%198 = bitcast %class.A* %a to i8*
+%199 = call %.IntArrayType %196(i8* %198,%.IntArrayType %197)
+%200 = alloca %.IntArrayType
+store %.IntArrayType %199, %.IntArrayType* %200
+%201 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
+%202 = load i8* , i8** %201
+%203 = bitcast i8* %202 to [6 x i8*]*
+%204 = getelementptr [6 x i8*], [6 x i8*]* %203, i32 0 , i32 1
+%205 = load i8* , i8** %204
+%206 = bitcast i8* %205 to %.IntArrayType(i8* ,%.IntArrayType)*
+%207 = load %.IntArrayType,%.IntArrayType* %200
+%208 = bitcast %class.A* %a to i8*
+%209 = call %.IntArrayType %206(i8* %208,%.IntArrayType %207)
+%210 = alloca %.IntArrayType
+store %.IntArrayType %209, %.IntArrayType* %210
+%211 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
+%212 = load i8* , i8** %211
+%213 = bitcast i8* %212 to [6 x i8*]*
+%214 = getelementptr [6 x i8*], [6 x i8*]* %213, i32 0 , i32 1
+%215 = load i8* , i8** %214
+%216 = bitcast i8* %215 to %.IntArrayType(i8* ,%.IntArrayType)*
+%217 = load %.IntArrayType,%.IntArrayType* %210
+%218 = bitcast %class.A* %a to i8*
+%219 = call %.IntArrayType %216(i8* %218,%.IntArrayType %217)
+%220 = alloca %.IntArrayType
+store %.IntArrayType %219, %.IntArrayType* %220
+%221 = alloca i1
+store i1 1, i1* %221
+%222 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
+%223 = load i8* , i8** %222
+%224 = bitcast i8* %223 to [6 x i8*]*
+%225 = getelementptr [6 x i8*], [6 x i8*]* %224, i32 0 , i32 2
+%226 = load i8* , i8** %225
+%227 = bitcast i8* %226 to i1(i8* ,i1)*
+%228 = load i1,i1* %221
+%229 = bitcast %class.A* %a to i8*
+%230 = call i1 %227(i8* %229,i1 %228)
+%231 = alloca i1
+store i1 %230, i1* %231
+%232 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
+%233 = load i8* , i8** %232
+%234 = bitcast i8* %233 to [6 x i8*]*
+%235 = getelementptr [6 x i8*], [6 x i8*]* %234, i32 0 , i32 2
+%236 = load i8* , i8** %235
+%237 = bitcast i8* %236 to i1(i8* ,i1)*
+%238 = load i1,i1* %231
+%239 = bitcast %class.A* %a to i8*
+%240 = call i1 %237(i8* %239,i1 %238)
+%241 = alloca i1
+store i1 %240, i1* %241
+%242 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
+%243 = load i8* , i8** %242
+%244 = bitcast i8* %243 to [6 x i8*]*
+%245 = getelementptr [6 x i8*], [6 x i8*]* %244, i32 0 , i32 2
+%246 = load i8* , i8** %245
+%247 = bitcast i8* %246 to i1(i8* ,i1)*
+%248 = load i1,i1* %241
+%249 = bitcast %class.A* %a to i8*
+%250 = call i1 %247(i8* %249,i1 %248)
+%251 = alloca i1
+store i1 %250, i1* %251
+%252 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
+%253 = load i8* , i8** %252
+%254 = bitcast i8* %253 to [6 x i8*]*
+%255 = getelementptr [6 x i8*], [6 x i8*]* %254, i32 0 , i32 2
+%256 = load i8* , i8** %255
+%257 = bitcast i8* %256 to i1(i8* ,i1)*
+%258 = load i1,i1* %251
+%259 = bitcast %class.A* %a to i8*
+%260 = call i1 %257(i8* %259,i1 %258)
+%261 = alloca i1
+store i1 %260, i1* %261
+%262 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
+%263 = load i8* , i8** %262
+%264 = bitcast i8* %263 to [6 x i8*]*
+%265 = getelementptr [6 x i8*], [6 x i8*]* %264, i32 0 , i32 2
+%266 = load i8* , i8** %265
+%267 = bitcast i8* %266 to i1(i8* ,i1)*
+%268 = load i1,i1* %261
+%269 = bitcast %class.A* %a to i8*
+%270 = call i1 %267(i8* %269,i1 %268)
+%271 = alloca i1
+store i1 %270, i1* %271
+%272 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
+%273 = load i8* , i8** %272
+%274 = bitcast i8* %273 to [6 x i8*]*
+%275 = getelementptr [6 x i8*], [6 x i8*]* %274, i32 0 , i32 2
+%276 = load i8* , i8** %275
+%277 = bitcast i8* %276 to i1(i8* ,i1)*
+%278 = load i1,i1* %271
+%279 = bitcast %class.A* %a to i8*
+%280 = call i1 %277(i8* %279,i1 %278)
+%281 = alloca i1
+store i1 %280, i1* %281
+%282 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
+%283 = load i8* , i8** %282
+%284 = bitcast i8* %283 to [6 x i8*]*
+%285 = getelementptr [6 x i8*], [6 x i8*]* %284, i32 0 , i32 2
+%286 = load i8* , i8** %285
+%287 = bitcast i8* %286 to i1(i8* ,i1)*
+%288 = load i1,i1* %281
+%289 = bitcast %class.A* %a to i8*
+%290 = call i1 %287(i8* %289,i1 %288)
+%291 = alloca i1
+store i1 %290, i1* %291
+%292 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
+%293 = load i8* , i8** %292
+%294 = bitcast i8* %293 to [6 x i8*]*
+%295 = getelementptr [6 x i8*], [6 x i8*]* %294, i32 0 , i32 3
+%296 = load i8* , i8** %295
+%297 = bitcast i8* %296 to %.BooleanArrayType(i8* ,%.BooleanArrayType)*
+%298 = load %.BooleanArrayType,%.BooleanArrayType* %boolean_array
+%299 = bitcast %class.A* %a to i8*
+%300 = call %.BooleanArrayType %297(i8* %299,%.BooleanArrayType %298)
+%301 = alloca %.BooleanArrayType
+store %.BooleanArrayType %300, %.BooleanArrayType* %301
+%302 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
+%303 = load i8* , i8** %302
+%304 = bitcast i8* %303 to [6 x i8*]*
+%305 = getelementptr [6 x i8*], [6 x i8*]* %304, i32 0 , i32 3
+%306 = load i8* , i8** %305
+%307 = bitcast i8* %306 to %.BooleanArrayType(i8* ,%.BooleanArrayType)*
+%308 = load %.BooleanArrayType,%.BooleanArrayType* %301
+%309 = bitcast %class.A* %a to i8*
+%310 = call %.BooleanArrayType %307(i8* %309,%.BooleanArrayType %308)
+%311 = alloca %.BooleanArrayType
+store %.BooleanArrayType %310, %.BooleanArrayType* %311
+%312 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
+%313 = load i8* , i8** %312
+%314 = bitcast i8* %313 to [6 x i8*]*
+%315 = getelementptr [6 x i8*], [6 x i8*]* %314, i32 0 , i32 3
+%316 = load i8* , i8** %315
+%317 = bitcast i8* %316 to %.BooleanArrayType(i8* ,%.BooleanArrayType)*
+%318 = load %.BooleanArrayType,%.BooleanArrayType* %311
+%319 = bitcast %class.A* %a to i8*
+%320 = call %.BooleanArrayType %317(i8* %319,%.BooleanArrayType %318)
+%321 = alloca %.BooleanArrayType
+store %.BooleanArrayType %320, %.BooleanArrayType* %321
+%322 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
+%323 = load i8* , i8** %322
+%324 = bitcast i8* %323 to [6 x i8*]*
+%325 = getelementptr [6 x i8*], [6 x i8*]* %324, i32 0 , i32 3
+%326 = load i8* , i8** %325
+%327 = bitcast i8* %326 to %.BooleanArrayType(i8* ,%.BooleanArrayType)*
+%328 = load %.BooleanArrayType,%.BooleanArrayType* %321
+%329 = bitcast %class.A* %a to i8*
+%330 = call %.BooleanArrayType %327(i8* %329,%.BooleanArrayType %328)
+%331 = alloca %.BooleanArrayType
+store %.BooleanArrayType %330, %.BooleanArrayType* %331
+%332 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
+%333 = load i8* , i8** %332
+%334 = bitcast i8* %333 to [6 x i8*]*
+%335 = getelementptr [6 x i8*], [6 x i8*]* %334, i32 0 , i32 3
+%336 = load i8* , i8** %335
+%337 = bitcast i8* %336 to %.BooleanArrayType(i8* ,%.BooleanArrayType)*
+%338 = load %.BooleanArrayType,%.BooleanArrayType* %331
+%339 = bitcast %class.A* %a to i8*
+%340 = call %.BooleanArrayType %337(i8* %339,%.BooleanArrayType %338)
+%341 = alloca %.BooleanArrayType
+store %.BooleanArrayType %340, %.BooleanArrayType* %341
+%342 = getelementptr inbounds %class.B, %class.B* %b, i32 0, i32 0
+%343 = load i8* , i8** %342
+%344 = bitcast i8* %343 to [3 x i8*]*
+%345 = getelementptr [3 x i8*], [3 x i8*]* %344, i32 0 , i32 2
+%346 = load i8* , i8** %345
+%347 = bitcast i8* %346 to %class.B(i8* ,%class.B)*
+%348 = load %class.B,%class.B* %b
+%349 = bitcast %class.B* %b to i8*
+%350 = call %class.B %347(i8* %349,%class.B %348)
+%351 = alloca %class.B
+store %class.B %350, %class.B* %351
+%352 = getelementptr inbounds %class.B, %class.B* %b, i32 0, i32 0
+%353 = load i8* , i8** %352
+%354 = bitcast i8* %353 to [3 x i8*]*
+%355 = getelementptr [3 x i8*], [3 x i8*]* %354, i32 0 , i32 2
+%356 = load i8* , i8** %355
+%357 = bitcast i8* %356 to %class.B(i8* ,%class.B)*
+%358 = load %class.B,%class.B* %351
+%359 = bitcast %class.B* %b to i8*
+%360 = call %class.B %357(i8* %359,%class.B %358)
+%361 = alloca %class.B
+store %class.B %360, %class.B* %361
+%362 = getelementptr inbounds %class.B, %class.B* %b, i32 0, i32 0
+%363 = load i8* , i8** %362
+%364 = bitcast i8* %363 to [3 x i8*]*
+%365 = getelementptr [3 x i8*], [3 x i8*]* %364, i32 0 , i32 2
+%366 = load i8* , i8** %365
+%367 = bitcast i8* %366 to %class.B(i8* ,%class.B)*
+%368 = load %class.B,%class.B* %361
+%369 = bitcast %class.B* %b to i8*
+%370 = call %class.B %367(i8* %369,%class.B %368)
+%371 = alloca %class.B
+store %class.B %370, %class.B* %371
+%372 = getelementptr inbounds %class.B, %class.B* %b, i32 0, i32 0
+%373 = load i8* , i8** %372
+%374 = bitcast i8* %373 to [3 x i8*]*
+%375 = getelementptr [3 x i8*], [3 x i8*]* %374, i32 0 , i32 2
+%376 = load i8* , i8** %375
+%377 = bitcast i8* %376 to %class.B(i8* ,%class.B)*
+%378 = load %class.B,%class.B* %371
+%379 = bitcast %class.B* %b to i8*
+%380 = call %class.B %377(i8* %379,%class.B %378)
+%381 = alloca %class.B
+store %class.B %380, %class.B* %381
+%382 = getelementptr inbounds %class.B, %class.B* %b, i32 0, i32 0
+%383 = load i8* , i8** %382
+%384 = bitcast i8* %383 to [3 x i8*]*
+%385 = getelementptr [3 x i8*], [3 x i8*]* %384, i32 0 , i32 2
+%386 = load i8* , i8** %385
+%387 = bitcast i8* %386 to %class.B(i8* ,%class.B)*
+%388 = load %class.B,%class.B* %381
+%389 = bitcast %class.B* %b to i8*
+%390 = call %class.B %387(i8* %389,%class.B %388)
+%391 = alloca %class.B
+store %class.B %390, %class.B* %391
+%392 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
+%393 = load i8* , i8** %392
+%394 = bitcast i8* %393 to [6 x i8*]*
+%395 = getelementptr [6 x i8*], [6 x i8*]* %394, i32 0 , i32 5
+%396 = load i8* , i8** %395
+%397 = bitcast i8* %396 to i32(i8* ,i32,%.IntArrayType,i1,%.BooleanArrayType,%class.B)*
+%398 = load i32,i32* %160
+%399 = load %.IntArrayType,%.IntArrayType* %220
+%400 = load i1,i1* %291
+%401 = load %.BooleanArrayType,%.BooleanArrayType* %341
+%402 = load %class.B,%class.B* %391
+%403 = bitcast %class.A* %a to i8*
+%404 = call i32 %397(i8* %403,i32 %398,%.IntArrayType %399,i1 %400,%.BooleanArrayType %401,%class.B %402)
+%405 = alloca i32
+store i32 %404, i32* %405
+%406= load i32, i32* %405
+store i32 %406 , i32* %i
 ret i32 0 
 }
 define i32 @A.func_int(i8* %this,i32 %i.arg){
@@ -605,8 +614,8 @@ store i32 %8 , i32* %j
 store i32 0, i32* %9
 %10= load i32, i32* %9
 store i32 %10 , i32* %sum
-br label %loopstart11
-loopstart11:
+br label %loopstart14
+loopstart14:
 %11 = getelementptr %.IntArrayType,%.IntArrayType* %int_arr, i32 0,i32 0
 %12 = load i32, i32* %j
 %13 = load i32, i32* %11
@@ -614,17 +623,17 @@ loopstart11:
 %15 = alloca i1
 store i1 %14, i1* %15
 %16 = load i1,i1* %15
-br i1 %16, label %loop12, label %endloop13
-loop12:
+br i1 %16, label %loop15, label %endloop16
+loop15:
 %17 = load i32,i32* %j
 %18 = getelementptr %.IntArrayType,%.IntArrayType* %int_arr, i32 0,i32 0
 %19 =  load i32 ,i32* %18
 %20 = icmp slt i32 %17, %19
-br i1 %20,label %continue15, label %oob14
-oob14:
+br i1 %20,label %continue18, label %oob17
+oob17:
 call void () @throw_oob()
-br label %continue15
-continue15:
+br label %continue18
+continue18:
 %21 = getelementptr %.IntArrayType,%.IntArrayType* %int_arr, i32 0,i32 1
 %22 = load i32*,i32**%21
 %23 = getelementptr i32 ,i32* %22, i32 %17
@@ -644,25 +653,25 @@ store i32 1, i32* %29
 store i32 %32, i32* %33
 %34= load i32, i32* %33
 store i32 %34 , i32* %j
-br label %loopstart11
-endloop13:
+br label %loopstart14
+endloop16:
 %35 = load i32 , i32* %sum
 call void @print_int(i32 %35)
 %36 = load i1,i1* %b
-br i1 %36, label %if16, label %else17
-if16:
+br i1 %36, label %if19, label %else20
+if19:
 %37 = alloca i32
 store i32 1, i32* %37
 %38 = load i32 , i32* %37
 call void @print_int(i32 %38)
-br label %endif18
-else17:
+br label %endif21
+else20:
 %39 = alloca i32
 store i32 0, i32* %39
 %40 = load i32 , i32* %39
 call void @print_int(i32 %40)
-br label %endif18
-endif18:
+br label %endif21
+endif21:
 %41 = getelementptr %.BooleanArrayType,%.BooleanArrayType* %b_arr, i32 0,i32 0
 %42 = load i32 , i32* %41
 call void @print_int(i32 %42)
@@ -678,17 +687,17 @@ store i32 %46 , i32* %sum
 %48 = getelementptr %.BooleanArrayType,%.BooleanArrayType* %b_arr, i32 0,i32 0
 %49 =  load i32 ,i32* %48
 %50 = icmp slt i32 %47, %49
-br i1 %50,label %continue20, label %oob19
-oob19:
+br i1 %50,label %continue23, label %oob22
+oob22:
 call void () @throw_oob()
-br label %continue20
-continue20:
+br label %continue23
+continue23:
 %51 = getelementptr %.BooleanArrayType,%.BooleanArrayType* %b_arr, i32 0,i32 1
 %52 = load i1*,i1**%51
 %53 = getelementptr i1 ,i1* %52, i32 %47
 %54 = load i1,i1* %53
-br i1 %54, label %if21, label %else22
-if21:
+br i1 %54, label %if24, label %else25
+if24:
 %55 = alloca i32
 store i32 1, i32* %55
 %56= load i32, i32* %sum
@@ -698,8 +707,8 @@ store i32 1, i32* %55
 store i32 %58, i32* %59
 %60= load i32, i32* %59
 store i32 %60 , i32* %sum
-br label %endif23
-else22:
+br label %endif26
+else25:
 %61 = alloca i32
 store i32 10, i32* %61
 %62= load i32, i32* %sum
@@ -709,8 +718,8 @@ store i32 10, i32* %61
 store i32 %64, i32* %65
 %66= load i32, i32* %65
 store i32 %66 , i32* %sum
-br label %endif23
-endif23:
+br label %endif26
+endif26:
 %67 = load i32 , i32* %sum
 call void @print_int(i32 %67)
 %68 = getelementptr inbounds %class.B, %class.B* %c_b, i32 0, i32 0

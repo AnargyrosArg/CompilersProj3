@@ -670,4 +670,27 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
 
         return tempRegister1;
     }
+
+    public String visit(NotExpression n , String argu){
+        String clauseRegister = n.f1.accept(this,argu);
+        String tempRegister = Global.getTempRegister();
+        String true_label = "settrue"+Global.getLabelTag();
+        String false_label = "setfalse"+Global.getLabelTag();
+        String continue_label = "continue"+Global.getLabelTag();
+
+        System.out.println(tempRegister+" = load i1,i1* "+clauseRegister);
+        System.out.println("br i1 "+tempRegister+", label %"+false_label+", label %"+true_label);  
+        
+        System.out.println(true_label+":");
+        System.out.println("store i1 1, i1* "+clauseRegister);
+        System.out.println("br label %"+continue_label);
+
+        System.out.println(false_label+":");
+        System.out.println("store i1 0, i1* "+clauseRegister);
+        System.out.println("br label %"+continue_label);
+        System.out.println(continue_label+":");
+
+        return clauseRegister;
+
+    }
 }

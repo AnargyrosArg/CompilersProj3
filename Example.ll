@@ -16,630 +16,407 @@ define void @throw_oob() {
    }
 %.BooleanArrayType = type { i32 , i1*}
 %.IntArrayType = type { i32 , i32*}
-%class.Receiver = type { i8*}
-@.Receiver_vtable = global [8x i8*] [i8* bitcast (i1 (i8*,%class.A )* @Receiver.A to i8*),
-i8* bitcast (i1 (i8*,%class.B )* @Receiver.B to i8*),
-i8* bitcast (i1 (i8*,%class.C )* @Receiver.C to i8*),
-i8* bitcast (i1 (i8*,%class.D )* @Receiver.D to i8*),
-i8* bitcast (%class.A(i8*)* @Receiver.alloc_B_for_A to i8*),
-i8* bitcast (%class.A(i8*)* @Receiver.alloc_C_for_A to i8*),
-i8* bitcast (%class.A(i8*)* @Receiver.alloc_D_for_A to i8*),
-i8* bitcast (%class.B(i8*)* @Receiver.alloc_D_for_B to i8*)]
-
-%class.A = type { i8*}
-@.A_vtable = global [3x i8*] [i8* bitcast (i32 (i8*)* @A.foo to i8*),
-i8* bitcast (i32 (i8*)* @A.bar to i8*),
-i8* bitcast (i32 (i8*)* @A.test to i8*)]
-
-%class.B = type { i8*}
-@.B_vtable = global [5x i8*] [i8* bitcast (i32 (i8*)* @A.foo to i8*),
-i8* bitcast (i32 (i8*)* @B.bar to i8*),
-i8* bitcast (i32 (i8*)* @A.test to i8*),
-i8* bitcast (i32 (i8*)* @B.not_overriden to i8*),
-i8* bitcast (i32 (i8*)* @B.another to i8*)]
-
-%class.C = type { i8*}
-@.C_vtable = global [3x i8*] [i8* bitcast (i32 (i8*)* @A.foo to i8*),
-i8* bitcast (i32 (i8*)* @C.bar to i8*),
-i8* bitcast (i32 (i8*)* @A.test to i8*)]
-
-%class.D = type { i8*}
-@.D_vtable = global [6x i8*] [i8* bitcast (i32 (i8*)* @A.foo to i8*),
-i8* bitcast (i32 (i8*)* @D.bar to i8*),
-i8* bitcast (i32 (i8*)* @A.test to i8*),
-i8* bitcast (i32 (i8*)* @B.not_overriden to i8*),
-i8* bitcast (i32 (i8*)* @D.another to i8*),
-i8* bitcast (i32 (i8*)* @D.stef to i8*)]
-
 define i32 @main(){
-%dummy = alloca i1
-%a = alloca %class.A
-%b = alloca %class.B
-%c = alloca %class.C
-%d = alloca %class.D
-%separator = alloca i32
-%cls_separator = alloca i32
+%size = alloca i32
+%index = alloca i32
+%sum = alloca i32
+%int_array = alloca %.IntArrayType
+%int_array_ref = alloca %.IntArrayType
+%boolean_array = alloca %.BooleanArrayType
+%flag = alloca i1
 %1 = alloca i32
-store i32 1111111111, i32* %1
+store i32 1024, i32* %1
 %2= load i32, i32* %1
-store i32 %2 , i32* %separator
+store i32 %2 , i32* %size
 %3 = alloca i32
-store i32 333333333, i32* %3
-%4= load i32, i32* %3
-store i32 %4 , i32* %cls_separator
-%5 = call i8* @calloc(i32 1,i32 8)
-%6 = bitcast i8* %5 to %class.A*
-%7 = getelementptr inbounds %class.A, %class.A* %6, i32 0, i32 0
-%8 = bitcast i8** %7 to [3 x i8*]**
-store [3 x i8*]* @.A_vtable, [3 x i8*]** %8
-%9 = call i8* @calloc(i32 1,i32 8)
-%10 = bitcast i8* %9 to %class.Receiver*
-%11 = getelementptr inbounds %class.Receiver, %class.Receiver* %10, i32 0, i32 0
-%12 = bitcast i8** %11 to [8 x i8*]**
-store [8 x i8*]* @.Receiver_vtable, [8 x i8*]** %12
-%13 = getelementptr inbounds %class.Receiver, %class.Receiver* %10, i32 0, i32 0
-%14 = load i8* , i8** %13
-%15 = bitcast i8* %14 to [8 x i8*]*
-%16 = getelementptr [8 x i8*], [8 x i8*]* %15, i32 0 , i32 0
-%17 = load i8* , i8** %16
-%18 = bitcast i8* %17 to i1(i8* ,%class.A)*
-%19 = load %class.A,%class.A* %6
-%20 = bitcast %class.Receiver* %10 to i8*
-%21 = call i1 %18(i8* %20,%class.A %19)
-%22 = alloca i1
-store i1 %21, i1* %22
-%23= load i1, i1* %22
-store i1 %23 , i1* %dummy
-%24 = load i32 , i32* %separator
-call void @print_int(i32 %24)
-%25 = call i8* @calloc(i32 1,i32 8)
-%26 = bitcast i8* %25 to %class.Receiver*
-%27 = getelementptr inbounds %class.Receiver, %class.Receiver* %26, i32 0, i32 0
-%28 = bitcast i8** %27 to [8 x i8*]**
-store [8 x i8*]* @.Receiver_vtable, [8 x i8*]** %28
-%29 = getelementptr inbounds %class.Receiver, %class.Receiver* %26, i32 0, i32 0
-%30 = load i8* , i8** %29
-%31 = bitcast i8* %30 to [8 x i8*]*
-%32 = getelementptr [8 x i8*], [8 x i8*]* %31, i32 0 , i32 4
-%33 = load i8* , i8** %32
-%34 = bitcast i8* %33 to %class.A(i8* )*
-%35 = bitcast %class.Receiver* %26 to i8*
-%36 = call %class.A %34(i8* %35)
-%37 = alloca %class.A
-store %class.A %36, %class.A* %37
-%38 = call i8* @calloc(i32 1,i32 8)
-%39 = bitcast i8* %38 to %class.Receiver*
-%40 = getelementptr inbounds %class.Receiver, %class.Receiver* %39, i32 0, i32 0
-%41 = bitcast i8** %40 to [8 x i8*]**
-store [8 x i8*]* @.Receiver_vtable, [8 x i8*]** %41
-%42 = getelementptr inbounds %class.Receiver, %class.Receiver* %39, i32 0, i32 0
-%43 = load i8* , i8** %42
-%44 = bitcast i8* %43 to [8 x i8*]*
-%45 = getelementptr [8 x i8*], [8 x i8*]* %44, i32 0 , i32 0
-%46 = load i8* , i8** %45
-%47 = bitcast i8* %46 to i1(i8* ,%class.A)*
-%48 = load %class.A,%class.A* %37
-%49 = bitcast %class.Receiver* %39 to i8*
-%50 = call i1 %47(i8* %49,%class.A %48)
-%51 = alloca i1
-store i1 %50, i1* %51
-%52= load i1, i1* %51
-store i1 %52 , i1* %dummy
-%53 = load i32 , i32* %separator
-call void @print_int(i32 %53)
-%54 = call i8* @calloc(i32 1,i32 8)
-%55 = bitcast i8* %54 to %class.Receiver*
-%56 = getelementptr inbounds %class.Receiver, %class.Receiver* %55, i32 0, i32 0
-%57 = bitcast i8** %56 to [8 x i8*]**
-store [8 x i8*]* @.Receiver_vtable, [8 x i8*]** %57
-%58 = getelementptr inbounds %class.Receiver, %class.Receiver* %55, i32 0, i32 0
-%59 = load i8* , i8** %58
-%60 = bitcast i8* %59 to [8 x i8*]*
-%61 = getelementptr [8 x i8*], [8 x i8*]* %60, i32 0 , i32 5
-%62 = load i8* , i8** %61
-%63 = bitcast i8* %62 to %class.A(i8* )*
-%64 = bitcast %class.Receiver* %55 to i8*
-%65 = call %class.A %63(i8* %64)
-%66 = alloca %class.A
-store %class.A %65, %class.A* %66
-%67 = call i8* @calloc(i32 1,i32 8)
-%68 = bitcast i8* %67 to %class.Receiver*
-%69 = getelementptr inbounds %class.Receiver, %class.Receiver* %68, i32 0, i32 0
-%70 = bitcast i8** %69 to [8 x i8*]**
-store [8 x i8*]* @.Receiver_vtable, [8 x i8*]** %70
-%71 = getelementptr inbounds %class.Receiver, %class.Receiver* %68, i32 0, i32 0
-%72 = load i8* , i8** %71
-%73 = bitcast i8* %72 to [8 x i8*]*
-%74 = getelementptr [8 x i8*], [8 x i8*]* %73, i32 0 , i32 0
-%75 = load i8* , i8** %74
-%76 = bitcast i8* %75 to i1(i8* ,%class.A)*
-%77 = load %class.A,%class.A* %66
-%78 = bitcast %class.Receiver* %68 to i8*
-%79 = call i1 %76(i8* %78,%class.A %77)
-%80 = alloca i1
-store i1 %79, i1* %80
-%81= load i1, i1* %80
-store i1 %81 , i1* %dummy
-%82 = load i32 , i32* %separator
-call void @print_int(i32 %82)
-%83 = call i8* @calloc(i32 1,i32 8)
-%84 = bitcast i8* %83 to %class.Receiver*
-%85 = getelementptr inbounds %class.Receiver, %class.Receiver* %84, i32 0, i32 0
-%86 = bitcast i8** %85 to [8 x i8*]**
-store [8 x i8*]* @.Receiver_vtable, [8 x i8*]** %86
-%87 = getelementptr inbounds %class.Receiver, %class.Receiver* %84, i32 0, i32 0
-%88 = load i8* , i8** %87
-%89 = bitcast i8* %88 to [8 x i8*]*
-%90 = getelementptr [8 x i8*], [8 x i8*]* %89, i32 0 , i32 6
-%91 = load i8* , i8** %90
-%92 = bitcast i8* %91 to %class.A(i8* )*
-%93 = bitcast %class.Receiver* %84 to i8*
-%94 = call %class.A %92(i8* %93)
-%95 = alloca %class.A
-store %class.A %94, %class.A* %95
-%96 = call i8* @calloc(i32 1,i32 8)
-%97 = bitcast i8* %96 to %class.Receiver*
-%98 = getelementptr inbounds %class.Receiver, %class.Receiver* %97, i32 0, i32 0
-%99 = bitcast i8** %98 to [8 x i8*]**
-store [8 x i8*]* @.Receiver_vtable, [8 x i8*]** %99
-%100 = getelementptr inbounds %class.Receiver, %class.Receiver* %97, i32 0, i32 0
-%101 = load i8* , i8** %100
-%102 = bitcast i8* %101 to [8 x i8*]*
-%103 = getelementptr [8 x i8*], [8 x i8*]* %102, i32 0 , i32 0
-%104 = load i8* , i8** %103
-%105 = bitcast i8* %104 to i1(i8* ,%class.A)*
-%106 = load %class.A,%class.A* %95
-%107 = bitcast %class.Receiver* %97 to i8*
-%108 = call i1 %105(i8* %107,%class.A %106)
-%109 = alloca i1
-store i1 %108, i1* %109
-%110= load i1, i1* %109
-store i1 %110 , i1* %dummy
-%111 = load i32 , i32* %cls_separator
-call void @print_int(i32 %111)
-%112 = call i8* @calloc(i32 1,i32 8)
-%113 = bitcast i8* %112 to %class.B*
-%114 = getelementptr inbounds %class.B, %class.B* %113, i32 0, i32 0
-%115 = bitcast i8** %114 to [5 x i8*]**
-store [5 x i8*]* @.B_vtable, [5 x i8*]** %115
-%116 = call i8* @calloc(i32 1,i32 8)
-%117 = bitcast i8* %116 to %class.Receiver*
-%118 = getelementptr inbounds %class.Receiver, %class.Receiver* %117, i32 0, i32 0
-%119 = bitcast i8** %118 to [8 x i8*]**
-store [8 x i8*]* @.Receiver_vtable, [8 x i8*]** %119
-%120 = getelementptr inbounds %class.Receiver, %class.Receiver* %117, i32 0, i32 0
-%121 = load i8* , i8** %120
-%122 = bitcast i8* %121 to [8 x i8*]*
-%123 = getelementptr [8 x i8*], [8 x i8*]* %122, i32 0 , i32 1
-%124 = load i8* , i8** %123
-%125 = bitcast i8* %124 to i1(i8* ,%class.B)*
-%126 = load %class.B,%class.B* %113
-%127 = bitcast %class.Receiver* %117 to i8*
-%128 = call i1 %125(i8* %127,%class.B %126)
-%129 = alloca i1
-store i1 %128, i1* %129
-%130= load i1, i1* %129
-store i1 %130 , i1* %dummy
-%131 = load i32 , i32* %separator
-call void @print_int(i32 %131)
-%132 = call i8* @calloc(i32 1,i32 8)
-%133 = bitcast i8* %132 to %class.Receiver*
-%134 = getelementptr inbounds %class.Receiver, %class.Receiver* %133, i32 0, i32 0
-%135 = bitcast i8** %134 to [8 x i8*]**
-store [8 x i8*]* @.Receiver_vtable, [8 x i8*]** %135
-%136 = getelementptr inbounds %class.Receiver, %class.Receiver* %133, i32 0, i32 0
-%137 = load i8* , i8** %136
-%138 = bitcast i8* %137 to [8 x i8*]*
-%139 = getelementptr [8 x i8*], [8 x i8*]* %138, i32 0 , i32 7
-%140 = load i8* , i8** %139
-%141 = bitcast i8* %140 to %class.B(i8* )*
-%142 = bitcast %class.Receiver* %133 to i8*
-%143 = call %class.B %141(i8* %142)
-%144 = alloca %class.B
-store %class.B %143, %class.B* %144
-%145 = call i8* @calloc(i32 1,i32 8)
-%146 = bitcast i8* %145 to %class.Receiver*
-%147 = getelementptr inbounds %class.Receiver, %class.Receiver* %146, i32 0, i32 0
-%148 = bitcast i8** %147 to [8 x i8*]**
-store [8 x i8*]* @.Receiver_vtable, [8 x i8*]** %148
-%149 = getelementptr inbounds %class.Receiver, %class.Receiver* %146, i32 0, i32 0
-%150 = load i8* , i8** %149
-%151 = bitcast i8* %150 to [8 x i8*]*
-%152 = getelementptr [8 x i8*], [8 x i8*]* %151, i32 0 , i32 1
-%153 = load i8* , i8** %152
-%154 = bitcast i8* %153 to i1(i8* ,%class.B)*
-%155 = load %class.B,%class.B* %144
-%156 = bitcast %class.Receiver* %146 to i8*
-%157 = call i1 %154(i8* %156,%class.B %155)
-%158 = alloca i1
-store i1 %157, i1* %158
-%159= load i1, i1* %158
-store i1 %159 , i1* %dummy
-%160 = load i32 , i32* %cls_separator
-call void @print_int(i32 %160)
-%161 = call i8* @calloc(i32 1,i32 8)
-%162 = bitcast i8* %161 to %class.C*
-%163 = getelementptr inbounds %class.C, %class.C* %162, i32 0, i32 0
-%164 = bitcast i8** %163 to [3 x i8*]**
-store [3 x i8*]* @.C_vtable, [3 x i8*]** %164
-%165 = call i8* @calloc(i32 1,i32 8)
-%166 = bitcast i8* %165 to %class.Receiver*
-%167 = getelementptr inbounds %class.Receiver, %class.Receiver* %166, i32 0, i32 0
-%168 = bitcast i8** %167 to [8 x i8*]**
-store [8 x i8*]* @.Receiver_vtable, [8 x i8*]** %168
-%169 = getelementptr inbounds %class.Receiver, %class.Receiver* %166, i32 0, i32 0
-%170 = load i8* , i8** %169
-%171 = bitcast i8* %170 to [8 x i8*]*
-%172 = getelementptr [8 x i8*], [8 x i8*]* %171, i32 0 , i32 2
-%173 = load i8* , i8** %172
-%174 = bitcast i8* %173 to i1(i8* ,%class.C)*
-%175 = load %class.C,%class.C* %162
-%176 = bitcast %class.Receiver* %166 to i8*
-%177 = call i1 %174(i8* %176,%class.C %175)
-%178 = alloca i1
-store i1 %177, i1* %178
-%179= load i1, i1* %178
-store i1 %179 , i1* %dummy
-%180 = load i32 , i32* %cls_separator
-call void @print_int(i32 %180)
-%181 = call i8* @calloc(i32 1,i32 8)
-%182 = bitcast i8* %181 to %class.D*
-%183 = getelementptr inbounds %class.D, %class.D* %182, i32 0, i32 0
-%184 = bitcast i8** %183 to [6 x i8*]**
-store [6 x i8*]* @.D_vtable, [6 x i8*]** %184
-%185 = call i8* @calloc(i32 1,i32 8)
-%186 = bitcast i8* %185 to %class.Receiver*
-%187 = getelementptr inbounds %class.Receiver, %class.Receiver* %186, i32 0, i32 0
-%188 = bitcast i8** %187 to [8 x i8*]**
-store [8 x i8*]* @.Receiver_vtable, [8 x i8*]** %188
-%189 = getelementptr inbounds %class.Receiver, %class.Receiver* %186, i32 0, i32 0
-%190 = load i8* , i8** %189
-%191 = bitcast i8* %190 to [8 x i8*]*
-%192 = getelementptr [8 x i8*], [8 x i8*]* %191, i32 0 , i32 3
-%193 = load i8* , i8** %192
-%194 = bitcast i8* %193 to i1(i8* ,%class.D)*
-%195 = load %class.D,%class.D* %182
-%196 = bitcast %class.Receiver* %186 to i8*
-%197 = call i1 %194(i8* %196,%class.D %195)
-%198 = alloca i1
-store i1 %197, i1* %198
-%199= load i1, i1* %198
-store i1 %199 , i1* %dummy
+store i32 1, i32* %3
+%4= load i32, i32* %size
+%5= load i32, i32* %3
+%6 = add i32 %4, %5
+%7 = alloca i32
+store i32 %6, i32* %7
+%8 = alloca i32
+store i32 1, i32* %8
+%9= load i32, i32* %7
+%10= load i32, i32* %8
+%11 = sub i32 %9, %10
+%12 = alloca i32
+store i32 %11, i32* %12
+%13 = alloca %.IntArrayType
+%14 = load i32 ,i32* %12
+%15 = call i8* @calloc(i32 32 , i32 %14)
+%16 = bitcast i8* %15 to i32*
+%17 = getelementptr %.IntArrayType,%.IntArrayType* %13,i32 0,i32 1
+%18 = getelementptr %.IntArrayType,%.IntArrayType* %13,i32 0,i32 0
+store i32 %14,i32* %18
+store i32* %16, i32** %17
+%19= load %.IntArrayType, %.IntArrayType* %13
+store %.IntArrayType %19 , %.IntArrayType* %int_array
+%20 = getelementptr %.IntArrayType,%.IntArrayType* %int_array, i32 0,i32 0
+%21 = load i32, i32* %20
+%22 = load i32, i32* %size
+%23 = icmp slt i32 %21, %22
+%24 = alloca i1
+store i1 %23, i1* %24
+%25 = load i1,i1* %24
+br i1 %25, label %setfalse2, label %settrue1
+settrue1:
+store i1 1, i1* %24
+br label %continue3
+setfalse2:
+store i1 0, i1* %24
+br label %continue3
+continue3:
+%26 = getelementptr %.IntArrayType,%.IntArrayType* %int_array, i32 0,i32 0
+%27 = load i32, i32* %size
+%28 = load i32, i32* %26
+%29 = icmp slt i32 %27, %28
+%30 = alloca i1
+store i1 %29, i1* %30
+%31 = load i1,i1* %30
+br i1 %31, label %setfalse5, label %settrue4
+settrue4:
+store i1 1, i1* %30
+br label %continue6
+setfalse5:
+store i1 0, i1* %30
+br label %continue6
+continue6:
+%32 = load i1,i1* %24
+%33 = load i1,i1* %30
+br i1 %32 , label %expr1_true7,label %expr1_false9
+expr1_true7:
+br i1 %33 , label %expr2_true8,label %expr2_false10
+expr2_true8:
+br label %endAnd11
+expr1_false9:
+br label %endAnd11
+expr2_false10:
+br label %endAnd11
+endAnd11:
+%34 = phi i1 [1, %expr2_true8] , [0, %expr1_false9] , [0, %expr2_false10]
+%35 = alloca i1
+store i1 %34 , i1* %35
+%36 = load i1,i1* %35
+br i1 %36, label %if12, label %else13
+if12:
+%37 = getelementptr %.IntArrayType,%.IntArrayType* %int_array, i32 0,i32 0
+%38 = load i32 , i32* %37
+call void @print_int(i32 %38)
+br label %endif14
+else13:
+%39 = alloca i32
+store i32 2020, i32* %39
+%40 = load i32 , i32* %39
+call void @print_int(i32 %40)
+br label %endif14
+endif14:
+%41 = alloca i32
+store i32 1, i32* %41
+%42= load i32, i32* %size
+%43= load i32, i32* %41
+%44 = add i32 %42, %43
+%45 = alloca i32
+store i32 %44, i32* %45
+%46 = alloca i32
+store i32 1, i32* %46
+%47= load i32, i32* %45
+%48= load i32, i32* %46
+%49 = sub i32 %47, %48
+%50 = alloca i32
+store i32 %49, i32* %50
+%51 = alloca %.BooleanArrayType
+%52 = load i32 ,i32* %50
+%53 = call i8* @calloc(i32 32 , i32 %52)
+%54 = bitcast i8* %53 to i1*
+%55 = getelementptr %.BooleanArrayType,%.BooleanArrayType* %51,i32 0,i32 1
+%56 = getelementptr %.BooleanArrayType,%.BooleanArrayType* %51,i32 0,i32 0
+store i32 %52,i32* %56
+store i1* %54, i1** %55
+%57= load %.BooleanArrayType, %.BooleanArrayType* %51
+store %.BooleanArrayType %57 , %.BooleanArrayType* %boolean_array
+%58 = getelementptr %.BooleanArrayType,%.BooleanArrayType* %boolean_array, i32 0,i32 0
+%59 = load i32, i32* %58
+%60 = load i32, i32* %size
+%61 = icmp slt i32 %59, %60
+%62 = alloca i1
+store i1 %61, i1* %62
+%63 = load i1,i1* %62
+br i1 %63, label %setfalse16, label %settrue15
+settrue15:
+store i1 1, i1* %62
+br label %continue17
+setfalse16:
+store i1 0, i1* %62
+br label %continue17
+continue17:
+%64 = getelementptr %.BooleanArrayType,%.BooleanArrayType* %boolean_array, i32 0,i32 0
+%65 = load i32, i32* %size
+%66 = load i32, i32* %64
+%67 = icmp slt i32 %65, %66
+%68 = alloca i1
+store i1 %67, i1* %68
+%69 = load i1,i1* %68
+br i1 %69, label %setfalse19, label %settrue18
+settrue18:
+store i1 1, i1* %68
+br label %continue20
+setfalse19:
+store i1 0, i1* %68
+br label %continue20
+continue20:
+%70 = load i1,i1* %62
+%71 = load i1,i1* %68
+br i1 %70 , label %expr1_true21,label %expr1_false23
+expr1_true21:
+br i1 %71 , label %expr2_true22,label %expr2_false24
+expr2_true22:
+br label %endAnd25
+expr1_false23:
+br label %endAnd25
+expr2_false24:
+br label %endAnd25
+endAnd25:
+%72 = phi i1 [1, %expr2_true22] , [0, %expr1_false23] , [0, %expr2_false24]
+%73 = alloca i1
+store i1 %72 , i1* %73
+%74 = load i1,i1* %73
+br i1 %74, label %if26, label %else27
+if26:
+%75 = getelementptr %.BooleanArrayType,%.BooleanArrayType* %boolean_array, i32 0,i32 0
+%76 = load i32 , i32* %75
+call void @print_int(i32 %76)
+br label %endif28
+else27:
+%77 = alloca i32
+store i32 2020, i32* %77
+%78 = load i32 , i32* %77
+call void @print_int(i32 %78)
+br label %endif28
+endif28:
+%79 = alloca i32
+store i32 0, i32* %79
+%80= load i32, i32* %79
+store i32 %80 , i32* %index
+br label %loopstart29
+loopstart29:
+%81 = getelementptr %.IntArrayType,%.IntArrayType* %int_array, i32 0,i32 0
+%82 = load i32, i32* %index
+%83 = load i32, i32* %81
+%84 = icmp slt i32 %82, %83
+%85 = alloca i1
+store i1 %84, i1* %85
+%86 = load i1,i1* %85
+br i1 %86, label %loop30, label %endloop31
+loop30:
+%87 = alloca i32
+store i32 2, i32* %87
+%88 = load i32, i32* %index
+%89 = load i32, i32* %87
+%90 = mul i32 %88, %89
+%91 = alloca i32
+store i32 %90, i32* %91
+%92 = load i32,i32* %index
+%93 = getelementptr %.IntArrayType,%.IntArrayType* %int_array, i32 0,i32 0
+%94 =  load i32 ,i32* %93
+%95 = icmp slt i32 %92, %94
+br i1 %95,label %continue33, label %oob32
+oob32:
+call void () @throw_oob()
+br label %continue33
+continue33:
+%96 = getelementptr %.IntArrayType,%.IntArrayType* %int_array, i32 0,i32 1
+%97 =  load i32* , i32** %96
+%98 = getelementptr i32 ,i32* %97, i32 %92
+%99 = load i32 , i32 *%91
+store i32 %99 , i32* %98
+%100 = alloca i32
+store i32 1, i32* %100
+%101= load i32, i32* %index
+%102= load i32, i32* %100
+%103 = add i32 %101, %102
+%104 = alloca i32
+store i32 %103, i32* %104
+%105= load i32, i32* %104
+store i32 %105 , i32* %index
+br label %loopstart29
+endloop31:
+%106 = alloca i32
+store i32 0, i32* %106
+%107= load i32, i32* %106
+store i32 %107 , i32* %index
+%108= load %.IntArrayType, %.IntArrayType* %int_array
+store %.IntArrayType %108 , %.IntArrayType* %int_array_ref
+%109 = alloca i32
+store i32 0, i32* %109
+%110= load i32, i32* %109
+store i32 %110 , i32* %sum
+br label %loopstart34
+loopstart34:
+%111 = getelementptr %.IntArrayType,%.IntArrayType* %int_array_ref, i32 0,i32 0
+%112 = load i32, i32* %index
+%113 = load i32, i32* %111
+%114 = icmp slt i32 %112, %113
+%115 = alloca i1
+store i1 %114, i1* %115
+%116 = load i1,i1* %115
+br i1 %116, label %loop35, label %endloop36
+loop35:
+%117 = load i32,i32* %index
+%118 = getelementptr %.IntArrayType,%.IntArrayType* %int_array_ref, i32 0,i32 0
+%119 =  load i32 ,i32* %118
+%120 = icmp slt i32 %117, %119
+br i1 %120,label %continue38, label %oob37
+oob37:
+call void () @throw_oob()
+br label %continue38
+continue38:
+%121 = getelementptr %.IntArrayType,%.IntArrayType* %int_array_ref, i32 0,i32 1
+%122 = load i32*,i32**%121
+%123 = getelementptr i32 ,i32* %122, i32 %117
+%124= load i32, i32* %123
+%125= load i32, i32* %sum
+%126 = add i32 %124, %125
+%127 = alloca i32
+store i32 %126, i32* %127
+%128= load i32, i32* %127
+store i32 %128 , i32* %sum
+%129 = alloca i32
+store i32 1, i32* %129
+%130= load i32, i32* %index
+%131= load i32, i32* %129
+%132 = add i32 %130, %131
+%133 = alloca i32
+store i32 %132, i32* %133
+%134= load i32, i32* %133
+store i32 %134 , i32* %index
+br label %loopstart34
+endloop36:
+%135 = load i32 , i32* %sum
+call void @print_int(i32 %135)
+%136 = alloca i32
+store i32 0, i32* %136
+%137= load i32, i32* %136
+store i32 %137 , i32* %index
+%138 = alloca i1
+store i1 1, i1* %138
+%139= load i1, i1* %138
+store i1 %139 , i1* %flag
+br label %loopstart39
+loopstart39:
+%140 = getelementptr %.BooleanArrayType,%.BooleanArrayType* %boolean_array, i32 0,i32 0
+%141 = load i32, i32* %index
+%142 = load i32, i32* %140
+%143 = icmp slt i32 %141, %142
+%144 = alloca i1
+store i1 %143, i1* %144
+%145 = load i1,i1* %144
+br i1 %145, label %loop40, label %endloop41
+loop40:
+%146 = load i32,i32* %index
+%147 = getelementptr %.BooleanArrayType,%.BooleanArrayType* %boolean_array, i32 0,i32 0
+%148 =  load i32 ,i32* %147
+%149 = icmp slt i32 %146, %148
+br i1 %149,label %continue43, label %oob42
+oob42:
+call void () @throw_oob()
+br label %continue43
+continue43:
+%150 = getelementptr %.BooleanArrayType,%.BooleanArrayType* %boolean_array, i32 0,i32 1
+%151 =  load i1* , i1** %150
+%152 = getelementptr i1 ,i1* %151, i32 %146
+%153 = load i1 , i1 *%flag
+store i1 %153 , i1* %152
+%154 = load i1,i1* %flag
+br i1 %154, label %setfalse45, label %settrue44
+settrue44:
+store i1 1, i1* %flag
+br label %continue46
+setfalse45:
+store i1 0, i1* %flag
+br label %continue46
+continue46:
+%155= load i1, i1* %flag
+store i1 %155 , i1* %flag
+%156 = alloca i32
+store i32 1, i32* %156
+%157= load i32, i32* %index
+%158= load i32, i32* %156
+%159 = add i32 %157, %158
+%160 = alloca i32
+store i32 %159, i32* %160
+%161= load i32, i32* %160
+store i32 %161 , i32* %index
+br label %loopstart39
+endloop41:
+%162 = alloca i32
+store i32 0, i32* %162
+%163= load i32, i32* %162
+store i32 %163 , i32* %index
+%164 = alloca i32
+store i32 0, i32* %164
+%165= load i32, i32* %164
+store i32 %165 , i32* %sum
+br label %loopstart47
+loopstart47:
+%166 = getelementptr %.BooleanArrayType,%.BooleanArrayType* %boolean_array, i32 0,i32 0
+%167 = load i32, i32* %index
+%168 = load i32, i32* %166
+%169 = icmp slt i32 %167, %168
+%170 = alloca i1
+store i1 %169, i1* %170
+%171 = load i1,i1* %170
+br i1 %171, label %loop48, label %endloop49
+loop48:
+%172 = load i32,i32* %index
+%173 = getelementptr %.BooleanArrayType,%.BooleanArrayType* %boolean_array, i32 0,i32 0
+%174 =  load i32 ,i32* %173
+%175 = icmp slt i32 %172, %174
+br i1 %175,label %continue51, label %oob50
+oob50:
+call void () @throw_oob()
+br label %continue51
+continue51:
+%176 = getelementptr %.BooleanArrayType,%.BooleanArrayType* %boolean_array, i32 0,i32 1
+%177 = load i1*,i1**%176
+%178 = getelementptr i1 ,i1* %177, i32 %172
+%179 = load i1,i1* %178
+br i1 %179, label %if52, label %else53
+if52:
+%180 = alloca i32
+store i32 1, i32* %180
+%181= load i32, i32* %sum
+%182= load i32, i32* %180
+%183 = add i32 %181, %182
+%184 = alloca i32
+store i32 %183, i32* %184
+%185= load i32, i32* %184
+store i32 %185 , i32* %sum
+br label %endif54
+else53:
+%186 = alloca i32
+store i32 10, i32* %186
+%187= load i32, i32* %sum
+%188= load i32, i32* %186
+%189 = add i32 %187, %188
+%190 = alloca i32
+store i32 %189, i32* %190
+%191= load i32, i32* %190
+store i32 %191 , i32* %sum
+br label %endif54
+endif54:
+%192 = alloca i32
+store i32 1, i32* %192
+%193= load i32, i32* %index
+%194= load i32, i32* %192
+%195 = add i32 %193, %194
+%196 = alloca i32
+store i32 %195, i32* %196
+%197= load i32, i32* %196
+store i32 %197 , i32* %index
+br label %loopstart47
+endloop49:
+%198 = load i32 , i32* %sum
+call void @print_int(i32 %198)
 ret i32 0 
-}
-define i1 @Receiver.A(i8* %this,%class.A %a.arg){
-%a = alloca %class.A
-store %class.A %a.arg ,%class.A* %a
-%1 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
-%2 = load i8* , i8** %1
-%3 = bitcast i8* %2 to [3 x i8*]*
-%4 = getelementptr [3 x i8*], [3 x i8*]* %3, i32 0 , i32 0
-%5 = load i8* , i8** %4
-%6 = bitcast i8* %5 to i32(i8* )*
-%7 = bitcast %class.A* %a to i8*
-%8 = call i32 %6(i8* %7)
-%9 = alloca i32
-store i32 %8, i32* %9
-%10 = load i32 , i32* %9
-call void @print_int(i32 %10)
-%11 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
-%12 = load i8* , i8** %11
-%13 = bitcast i8* %12 to [3 x i8*]*
-%14 = getelementptr [3 x i8*], [3 x i8*]* %13, i32 0 , i32 1
-%15 = load i8* , i8** %14
-%16 = bitcast i8* %15 to i32(i8* )*
-%17 = bitcast %class.A* %a to i8*
-%18 = call i32 %16(i8* %17)
-%19 = alloca i32
-store i32 %18, i32* %19
-%20 = load i32 , i32* %19
-call void @print_int(i32 %20)
-%21 = getelementptr inbounds %class.A, %class.A* %a, i32 0, i32 0
-%22 = load i8* , i8** %21
-%23 = bitcast i8* %22 to [3 x i8*]*
-%24 = getelementptr [3 x i8*], [3 x i8*]* %23, i32 0 , i32 2
-%25 = load i8* , i8** %24
-%26 = bitcast i8* %25 to i32(i8* )*
-%27 = bitcast %class.A* %a to i8*
-%28 = call i32 %26(i8* %27)
-%29 = alloca i32
-store i32 %28, i32* %29
-%30 = load i32 , i32* %29
-call void @print_int(i32 %30)
-%31 = alloca i1
-store i1 1, i1* %31
-%32= load i1, i1* %31
-ret i1 %32
-}
-define i1 @Receiver.B(i8* %this,%class.B %b.arg){
-%b = alloca %class.B
-store %class.B %b.arg ,%class.B* %b
-%1 = getelementptr inbounds %class.B, %class.B* %b, i32 0, i32 0
-%2 = load i8* , i8** %1
-%3 = bitcast i8* %2 to [5 x i8*]*
-%4 = getelementptr [5 x i8*], [5 x i8*]* %3, i32 0 , i32 0
-%5 = load i8* , i8** %4
-%6 = bitcast i8* %5 to i32(i8* )*
-%7 = bitcast %class.B* %b to i8*
-%8 = call i32 %6(i8* %7)
-%9 = alloca i32
-store i32 %8, i32* %9
-%10 = load i32 , i32* %9
-call void @print_int(i32 %10)
-%11 = getelementptr inbounds %class.B, %class.B* %b, i32 0, i32 0
-%12 = load i8* , i8** %11
-%13 = bitcast i8* %12 to [5 x i8*]*
-%14 = getelementptr [5 x i8*], [5 x i8*]* %13, i32 0 , i32 1
-%15 = load i8* , i8** %14
-%16 = bitcast i8* %15 to i32(i8* )*
-%17 = bitcast %class.B* %b to i8*
-%18 = call i32 %16(i8* %17)
-%19 = alloca i32
-store i32 %18, i32* %19
-%20 = load i32 , i32* %19
-call void @print_int(i32 %20)
-%21 = getelementptr inbounds %class.B, %class.B* %b, i32 0, i32 0
-%22 = load i8* , i8** %21
-%23 = bitcast i8* %22 to [5 x i8*]*
-%24 = getelementptr [5 x i8*], [5 x i8*]* %23, i32 0 , i32 2
-%25 = load i8* , i8** %24
-%26 = bitcast i8* %25 to i32(i8* )*
-%27 = bitcast %class.B* %b to i8*
-%28 = call i32 %26(i8* %27)
-%29 = alloca i32
-store i32 %28, i32* %29
-%30 = load i32 , i32* %29
-call void @print_int(i32 %30)
-%31 = getelementptr inbounds %class.B, %class.B* %b, i32 0, i32 0
-%32 = load i8* , i8** %31
-%33 = bitcast i8* %32 to [5 x i8*]*
-%34 = getelementptr [5 x i8*], [5 x i8*]* %33, i32 0 , i32 3
-%35 = load i8* , i8** %34
-%36 = bitcast i8* %35 to i32(i8* )*
-%37 = bitcast %class.B* %b to i8*
-%38 = call i32 %36(i8* %37)
-%39 = alloca i32
-store i32 %38, i32* %39
-%40 = load i32 , i32* %39
-call void @print_int(i32 %40)
-%41 = getelementptr inbounds %class.B, %class.B* %b, i32 0, i32 0
-%42 = load i8* , i8** %41
-%43 = bitcast i8* %42 to [5 x i8*]*
-%44 = getelementptr [5 x i8*], [5 x i8*]* %43, i32 0 , i32 4
-%45 = load i8* , i8** %44
-%46 = bitcast i8* %45 to i32(i8* )*
-%47 = bitcast %class.B* %b to i8*
-%48 = call i32 %46(i8* %47)
-%49 = alloca i32
-store i32 %48, i32* %49
-%50 = load i32 , i32* %49
-call void @print_int(i32 %50)
-%51 = alloca i1
-store i1 1, i1* %51
-%52= load i1, i1* %51
-ret i1 %52
-}
-define i1 @Receiver.C(i8* %this,%class.C %c.arg){
-%c = alloca %class.C
-store %class.C %c.arg ,%class.C* %c
-%1 = getelementptr inbounds %class.C, %class.C* %c, i32 0, i32 0
-%2 = load i8* , i8** %1
-%3 = bitcast i8* %2 to [3 x i8*]*
-%4 = getelementptr [3 x i8*], [3 x i8*]* %3, i32 0 , i32 0
-%5 = load i8* , i8** %4
-%6 = bitcast i8* %5 to i32(i8* )*
-%7 = bitcast %class.C* %c to i8*
-%8 = call i32 %6(i8* %7)
-%9 = alloca i32
-store i32 %8, i32* %9
-%10 = load i32 , i32* %9
-call void @print_int(i32 %10)
-%11 = getelementptr inbounds %class.C, %class.C* %c, i32 0, i32 0
-%12 = load i8* , i8** %11
-%13 = bitcast i8* %12 to [3 x i8*]*
-%14 = getelementptr [3 x i8*], [3 x i8*]* %13, i32 0 , i32 1
-%15 = load i8* , i8** %14
-%16 = bitcast i8* %15 to i32(i8* )*
-%17 = bitcast %class.C* %c to i8*
-%18 = call i32 %16(i8* %17)
-%19 = alloca i32
-store i32 %18, i32* %19
-%20 = load i32 , i32* %19
-call void @print_int(i32 %20)
-%21 = getelementptr inbounds %class.C, %class.C* %c, i32 0, i32 0
-%22 = load i8* , i8** %21
-%23 = bitcast i8* %22 to [3 x i8*]*
-%24 = getelementptr [3 x i8*], [3 x i8*]* %23, i32 0 , i32 2
-%25 = load i8* , i8** %24
-%26 = bitcast i8* %25 to i32(i8* )*
-%27 = bitcast %class.C* %c to i8*
-%28 = call i32 %26(i8* %27)
-%29 = alloca i32
-store i32 %28, i32* %29
-%30 = load i32 , i32* %29
-call void @print_int(i32 %30)
-%31 = alloca i1
-store i1 1, i1* %31
-%32= load i1, i1* %31
-ret i1 %32
-}
-define i1 @Receiver.D(i8* %this,%class.D %d.arg){
-%d = alloca %class.D
-store %class.D %d.arg ,%class.D* %d
-%1 = getelementptr inbounds %class.D, %class.D* %d, i32 0, i32 0
-%2 = load i8* , i8** %1
-%3 = bitcast i8* %2 to [6 x i8*]*
-%4 = getelementptr [6 x i8*], [6 x i8*]* %3, i32 0 , i32 0
-%5 = load i8* , i8** %4
-%6 = bitcast i8* %5 to i32(i8* )*
-%7 = bitcast %class.D* %d to i8*
-%8 = call i32 %6(i8* %7)
-%9 = alloca i32
-store i32 %8, i32* %9
-%10 = load i32 , i32* %9
-call void @print_int(i32 %10)
-%11 = getelementptr inbounds %class.D, %class.D* %d, i32 0, i32 0
-%12 = load i8* , i8** %11
-%13 = bitcast i8* %12 to [6 x i8*]*
-%14 = getelementptr [6 x i8*], [6 x i8*]* %13, i32 0 , i32 1
-%15 = load i8* , i8** %14
-%16 = bitcast i8* %15 to i32(i8* )*
-%17 = bitcast %class.D* %d to i8*
-%18 = call i32 %16(i8* %17)
-%19 = alloca i32
-store i32 %18, i32* %19
-%20 = load i32 , i32* %19
-call void @print_int(i32 %20)
-%21 = getelementptr inbounds %class.D, %class.D* %d, i32 0, i32 0
-%22 = load i8* , i8** %21
-%23 = bitcast i8* %22 to [6 x i8*]*
-%24 = getelementptr [6 x i8*], [6 x i8*]* %23, i32 0 , i32 2
-%25 = load i8* , i8** %24
-%26 = bitcast i8* %25 to i32(i8* )*
-%27 = bitcast %class.D* %d to i8*
-%28 = call i32 %26(i8* %27)
-%29 = alloca i32
-store i32 %28, i32* %29
-%30 = load i32 , i32* %29
-call void @print_int(i32 %30)
-%31 = getelementptr inbounds %class.D, %class.D* %d, i32 0, i32 0
-%32 = load i8* , i8** %31
-%33 = bitcast i8* %32 to [6 x i8*]*
-%34 = getelementptr [6 x i8*], [6 x i8*]* %33, i32 0 , i32 3
-%35 = load i8* , i8** %34
-%36 = bitcast i8* %35 to i32(i8* )*
-%37 = bitcast %class.D* %d to i8*
-%38 = call i32 %36(i8* %37)
-%39 = alloca i32
-store i32 %38, i32* %39
-%40 = load i32 , i32* %39
-call void @print_int(i32 %40)
-%41 = getelementptr inbounds %class.D, %class.D* %d, i32 0, i32 0
-%42 = load i8* , i8** %41
-%43 = bitcast i8* %42 to [6 x i8*]*
-%44 = getelementptr [6 x i8*], [6 x i8*]* %43, i32 0 , i32 4
-%45 = load i8* , i8** %44
-%46 = bitcast i8* %45 to i32(i8* )*
-%47 = bitcast %class.D* %d to i8*
-%48 = call i32 %46(i8* %47)
-%49 = alloca i32
-store i32 %48, i32* %49
-%50 = load i32 , i32* %49
-call void @print_int(i32 %50)
-%51 = getelementptr inbounds %class.D, %class.D* %d, i32 0, i32 0
-%52 = load i8* , i8** %51
-%53 = bitcast i8* %52 to [6 x i8*]*
-%54 = getelementptr [6 x i8*], [6 x i8*]* %53, i32 0 , i32 5
-%55 = load i8* , i8** %54
-%56 = bitcast i8* %55 to i32(i8* )*
-%57 = bitcast %class.D* %d to i8*
-%58 = call i32 %56(i8* %57)
-%59 = alloca i32
-store i32 %58, i32* %59
-%60 = load i32 , i32* %59
-call void @print_int(i32 %60)
-%61 = alloca i1
-store i1 1, i1* %61
-%62= load i1, i1* %61
-ret i1 %62
-}
-define %class.A @Receiver.alloc_B_for_A(i8* %this){
-%1 = call i8* @calloc(i32 1,i32 8)
-%2 = bitcast i8* %1 to %class.B*
-%3 = getelementptr inbounds %class.B, %class.B* %2, i32 0, i32 0
-%4 = bitcast i8** %3 to [5 x i8*]**
-store [5 x i8*]* @.B_vtable, [5 x i8*]** %4
-%5 = bitcast %class.B* %2 to %class.A* 
-%6= load %class.A, %class.A* %5
-ret %class.A %6
-}
-define %class.A @Receiver.alloc_C_for_A(i8* %this){
-%1 = call i8* @calloc(i32 1,i32 8)
-%2 = bitcast i8* %1 to %class.C*
-%3 = getelementptr inbounds %class.C, %class.C* %2, i32 0, i32 0
-%4 = bitcast i8** %3 to [3 x i8*]**
-store [3 x i8*]* @.C_vtable, [3 x i8*]** %4
-%5 = bitcast %class.C* %2 to %class.A* 
-%6= load %class.A, %class.A* %5
-ret %class.A %6
-}
-define %class.A @Receiver.alloc_D_for_A(i8* %this){
-%1 = call i8* @calloc(i32 1,i32 8)
-%2 = bitcast i8* %1 to %class.D*
-%3 = getelementptr inbounds %class.D, %class.D* %2, i32 0, i32 0
-%4 = bitcast i8** %3 to [6 x i8*]**
-store [6 x i8*]* @.D_vtable, [6 x i8*]** %4
-%5 = bitcast %class.D* %2 to %class.A* 
-%6= load %class.A, %class.A* %5
-ret %class.A %6
-}
-define %class.B @Receiver.alloc_D_for_B(i8* %this){
-%1 = call i8* @calloc(i32 1,i32 8)
-%2 = bitcast i8* %1 to %class.D*
-%3 = getelementptr inbounds %class.D, %class.D* %2, i32 0, i32 0
-%4 = bitcast i8** %3 to [6 x i8*]**
-store [6 x i8*]* @.D_vtable, [6 x i8*]** %4
-%5 = bitcast %class.D* %2 to %class.B* 
-%6= load %class.B, %class.B* %5
-ret %class.B %6
-}
-define i32 @A.foo(i8* %this){
-%1 = alloca i32
-store i32 1, i32* %1
-%2= load i32, i32* %1
-ret i32 %2
-}
-define i32 @A.bar(i8* %this){
-%1 = alloca i32
-store i32 2, i32* %1
-%2= load i32, i32* %1
-ret i32 %2
-}
-define i32 @A.test(i8* %this){
-%1 = alloca i32
-store i32 3, i32* %1
-%2= load i32, i32* %1
-ret i32 %2
-}
-define i32 @B.bar(i8* %this){
-%1 = alloca i32
-store i32 12, i32* %1
-%2= load i32, i32* %1
-ret i32 %2
-}
-define i32 @B.not_overriden(i8* %this){
-%1 = alloca i32
-store i32 14, i32* %1
-%2= load i32, i32* %1
-ret i32 %2
-}
-define i32 @B.another(i8* %this){
-%1 = alloca i32
-store i32 15, i32* %1
-%2= load i32, i32* %1
-ret i32 %2
-}
-define i32 @C.bar(i8* %this){
-%1 = alloca i32
-store i32 22, i32* %1
-%2= load i32, i32* %1
-ret i32 %2
-}
-define i32 @D.bar(i8* %this){
-%1 = alloca i32
-store i32 32, i32* %1
-%2= load i32, i32* %1
-ret i32 %2
-}
-define i32 @D.another(i8* %this){
-%1 = alloca i32
-store i32 35, i32* %1
-%2= load i32, i32* %1
-ret i32 %2
-}
-define i32 @D.stef(i8* %this){
-%1 = alloca i32
-store i32 36, i32* %1
-%2= load i32, i32* %1
-ret i32 %2
 }

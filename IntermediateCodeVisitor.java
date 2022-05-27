@@ -215,6 +215,49 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
         return tempRegister4;
     }
 
+    public String visit(AndExpression n , String argu){
+        String expr1_register = n.f0.accept(this,argu);
+        String expr2_register = n.f2.accept(this,argu);
+        String expr1_value_register = Global.getTempRegister();
+        String expr2_value_register = Global.getTempRegister(); 
+        
+        String tempRegister1 = Global.getTempRegister();
+        String returnRegister = Global.getTempRegister();
+
+
+        String expr1_true_label = "expr1_true"+Global.getLabelTag();
+        String expr2_true_label = "expr2_true"+Global.getLabelTag();
+
+        String expr1_false_label = "expr1_false"+Global.getLabelTag();
+        String expr2_false_label = "expr2_false"+Global.getLabelTag();
+
+        String end_label = "endAnd"+Global.getLabelTag();
+
+        //load values
+        System.out.println(expr1_value_register+" = load i1,i1* "+expr1_register);
+        System.out.println(expr2_value_register+" = load i1,i1* "+expr2_register);
+        System.out.println("br i1 "+expr1_value_register+" , label %"+expr1_true_label+",label %"+expr1_false_label);
+        
+        System.out.println(expr1_true_label+":");
+        System.out.println("br i1 "+expr2_value_register+" , label %"+expr2_true_label+",label %"+expr2_false_label);
+        
+        System.out.println(expr2_true_label+":");
+        System.out.println("br label %"+end_label);
+        
+        System.out.println(expr1_false_label+":");
+        System.out.println("br label %"+end_label);
+
+        System.out.println(expr2_false_label+":");
+        System.out.println("br label %"+end_label);
+
+        System.out.println(end_label+":");
+        System.out.println(tempRegister1+" = phi i1 [1, %"+expr2_true_label+"] , [0, %"+expr1_false_label+"] , [0, %"+expr2_false_label+"]");
+        System.out.println(returnRegister+" = alloca i1");
+        System.out.println("store i1 "+tempRegister1+" , i1* "+returnRegister);
+
+        return returnRegister;
+    }
+
     public String visit(VarDeclaration n,String argu){
         String type = n.f0.accept(this,argu);
         String tempRegister1 = n.f1.accept(this,argu);
@@ -715,4 +758,5 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
         return clauseRegister;
 
     }
+
 }

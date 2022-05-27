@@ -133,7 +133,7 @@ public class TypeCheckVisitor extends GJDepthFirst<String,String>{
         //ensure return_expr_type is compatible with returntype
         String return_expr_type = n.f10.accept(this,classname);
        // System.out.println("Return type: "+ return_expr_type);
-        if(!return_expr_type.equals(return_type)){
+        if(!Global.isSubtype(return_expr_type, return_expr_type)){
             System.err.println("Incompatible return types got |"+return_type+"| expected |"+return_expr_type+"|");
             System.exit(-1);
         }

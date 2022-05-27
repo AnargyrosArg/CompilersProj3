@@ -73,21 +73,32 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
         }
         //return expr
         String expr_register = n.f10.accept(this,argu);
-        String tempRegister = Global.getTempRegister();
+        String expr_type = Global.evaluated_expression.get(n.f10.toString());
         if(type.equals("int")){
+            String tempRegister = Global.getTempRegister();
+
             System.out.println(tempRegister + "= load i32, i32* " +expr_register);
             System.out.println("ret i32 "+tempRegister);
         }else if(type.equals("int[]")){
+            String tempRegister = Global.getTempRegister();
+
             System.out.println(tempRegister + "= load %.IntArrayType, %.IntArrayType* " +expr_register);
             System.out.println("ret %.IntArrayType "+tempRegister);
         }else if(type.equals("boolean")){
+            String tempRegister = Global.getTempRegister();
+
             System.out.println(tempRegister + "= load i1, i1* " +expr_register);
             System.out.println("ret i1 "+tempRegister);
         }else if(type.equals("boolean[]")){
+            String tempRegister = Global.getTempRegister();
+
             System.out.println(tempRegister + "= load %.BooleanArrayType, %.BooleanArrayType* " +expr_register);
             System.out.println("ret %.BooleanArrayType "+tempRegister);
         }else{
-            System.out.println(tempRegister + "= load %class."+methodtype.split(" ")[0]+", %class."+methodtype.split(" ")[0]+"* " +expr_register);
+            String convertRegister = Global.getTempRegister();
+            String tempRegister = Global.getTempRegister();
+            System.out.println(convertRegister+" = bitcast %class."+expr_type+"* " + expr_register+" to %class."+methodtype.split(" ")[0]+"* ");
+            System.out.println(tempRegister + "= load %class."+methodtype.split(" ")[0]+", %class."+methodtype.split(" ")[0]+"* " +convertRegister);
             System.out.println("ret %class."+methodtype.split(" ")[0]+" "+tempRegister);
         }
         System.out.println("}");
@@ -98,28 +109,39 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
 
     public String visit(AssignmentStatement n ,String argu){
         String identifierRegister = n.f0.accept(this,argu);
-        String classname = argu;
         String type = Global.getFieldType(n.f0.f0.tokenImage, argu);
+        String expr_type = Global.evaluated_expression.get(n.f2.toString());
         String exprRegister = n.f2.accept(this,argu);
-        String tempRegister =  Global.getTempRegister();
+        
 
         if(type.equals("int")){
+            String tempRegister =  Global.getTempRegister();
+
             System.out.println(tempRegister + "= load i32, i32* " +exprRegister);
             System.out.println("store i32 "+tempRegister+" , i32* "+identifierRegister);
         }else if(type.equals("boolean")){
+            String tempRegister =  Global.getTempRegister();
+
             System.out.println(tempRegister + "= load i1, i1* " +exprRegister);
             System.out.println("store i1 "+tempRegister+" , i1* "+identifierRegister);
         }
         else if(type.equals("boolean[]")){
+            String tempRegister =  Global.getTempRegister();
+
             System.out.println(tempRegister + "= load %.BooleanArrayType, %.BooleanArrayType* " +exprRegister);
             System.out.println("store %.BooleanArrayType "+tempRegister+" , %.BooleanArrayType* "+identifierRegister);
         }
         else if(type.equals("int[]")){
+            String tempRegister =  Global.getTempRegister();
+
             System.out.println(tempRegister + "= load %.IntArrayType, %.IntArrayType* " +exprRegister);
             System.out.println("store %.IntArrayType "+tempRegister+" , %.IntArrayType* "+identifierRegister);
         }
         else{
-            System.out.println(tempRegister + "= load %class."+type+", %class."+type+"* " +exprRegister);
+            String convertRegister = Global.getTempRegister();
+            String tempRegister =  Global.getTempRegister();            
+            System.out.println(convertRegister+" = bitcast %class."+expr_type+"* " + exprRegister+" to %class."+type+"* ");
+            System.out.println(tempRegister + "= load %class."+type+", %class."+type+"* " +convertRegister);
             System.out.println("store %class."+type+" "+tempRegister+" , %class."+type+"* "+identifierRegister);
         }
         return identifierRegister;

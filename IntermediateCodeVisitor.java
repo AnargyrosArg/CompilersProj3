@@ -1,3 +1,5 @@
+import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
+
 import syntaxtree.*;
 
 import visitor.GJDepthFirst;
@@ -492,17 +494,30 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
         String expr_register = n.f3.accept(this,argu);
         String tempRegister1 = Global.getTempRegister();
         String tempRegister2 = Global.getTempRegister();
+        String isPositiveRegister = Global.getTempRegister();
         String tempRegister3 = Global.getTempRegister();
         String tempRegister4 = Global.getTempRegister();
         String tempRegister5 = Global.getTempRegister();
         String tempRegister6 = Global.getTempRegister();
 
-
+        String continue_label = "continue"+Global.getLabelTag();
+        String negative_alloc_label = "negative_value"+Global.getLabelTag();
 
         //allocate room in stack for array type -> a pointer for the actual array and an integer for its size
         System.out.println(tempRegister1+" = alloca %.IntArrayType");
         //load size of array integer
         System.out.println(tempRegister2+" = load i32 ,i32* "+expr_register);
+
+        System.out.println(isPositiveRegister+" = icmp slt i32 "+"0" +","+tempRegister2);
+        System.out.println("br i1 "+isPositiveRegister +", label %"+continue_label +", label %"+negative_alloc_label);
+        
+        System.out.println(negative_alloc_label+":");
+        System.out.println("call void () @throw_oob()");
+        System.out.println("br label %"+continue_label);
+        
+        System.out.println(continue_label+":");
+
+
         //allocate room in heap for actual array
         System.out.println(tempRegister3+" = call i8* @calloc(i32 32 , i32 "+ tempRegister2 +")");
         //cast to integer array type
@@ -584,7 +599,7 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
 
         //load array size
         System.out.println(array_size+" =  load i32 ,i32* "+tempRegister1);
-        System.out.println(out_of_bounds_condition+" = icmp slt i32 "+ index_value +", "+array_size);
+        System.out.println(out_of_bounds_condition+" = icmp ult i32 "+ index_value +", "+array_size);
       
         String OOBlabel = "oob"+Global.getLabelTag();
         String continuelabel = "continue"+ Global.getLabelTag();
@@ -643,7 +658,7 @@ public class IntermediateCodeVisitor extends GJDepthFirst<String,String>{
 
         //load array size
         System.out.println(array_size+" =  load i32 ,i32* "+tempRegister1);
-        System.out.println(out_of_bounds_condition+" = icmp slt i32 "+ index_value +", "+array_size);
+        System.out.println(out_of_bounds_condition+" = icmp ult i32 "+ index_value +", "+array_size);
       
         String OOBlabel = "oob"+Global.getLabelTag();
         String continuelabel = "continue"+ Global.getLabelTag();
